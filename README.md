@@ -160,6 +160,10 @@ If the `pre-commit` hook is installed successfully, you can run the following co
 $ pre-commit run --all-files
 ```
 
+> [!note]
+> Commit hooks can be bypassed by adding the `--no-verify` (`-n`) flag to the `git commit` command.
+> You may use it if you need fast and dirty commits. However, do not forget to pass the checks before pushing the changes.
+
 ## ✍️ License <a name = "license"></a>
 
 _DoCentre_ is licensed under the [MIT License](LICENSE).
