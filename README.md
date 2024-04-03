@@ -18,6 +18,10 @@
 ## 📝 Table of Contents
 
 - [About](#about)
+- [Getting Started](#getting_started)
+- [API Endpoints](#api)
+- [Running the Tests](#tests)
+- [Development](#development)
 - [License](#license)
 
 ## 🧐 About <a name = "about"></a>
@@ -26,6 +30,109 @@ _DoCentre_, **Do**cument **Centre**, is a robust document management platform de
 
 > [!note]
 > _DoCentre_ is developed as the course project for the "Cloud Native Development: toward best practice" course at National Yang Ming Chiao Tung University (NYCU).
+
+## 🏁 Getting Started <a name = "getting_started"></a>
+
+### Prerequisites
+
+- The _Go_ programming language (version 1.22 or later is recommended) is required to run the server. You can download and install Go from the [official website](https://go.dev/doc/install).
+
+### Starting the Server
+
+1. Clone the repository (or download the _ZIP_ file):
+
+```console
+$ git clone git@github.com:DoCentre/DoCentre.git
+# or extract the zip file
+$ unzip DoCentre-main.zip
+```
+
+2. Change into the project directory:
+
+```console
+$ cd DoCentre
+# or
+$ cd DoCentre-main
+```
+
+3. Run the server:
+
+```console
+$ go run main.go
+```
+
+The server should now be running on `localhost:8080`:
+
+```console
+$ curl http://localhost:8080/health
+{"message":"health check success"}
+```
+
+## 🧾 API Endpoints <a name = "api"></a>
+
+### Health Check
+
+- URL: `/health`
+- Method: `GET`
+- Description: Check the health of the server.
+- Response:
+  - `200 OK`: `{"message":"health check success"}`
+  - `4xx` or `5xx`
+
+## 🔧 Running the Tests <a name = "tests"></a>
+
+_DoCentre_ uses the `testing` package in _Go_ to write tests.
+To run the tests, execute the following command:
+
+```console
+$ go test ./...
+```
+
+Alternatively, you can run the tests with coverage:
+
+```console
+$ go test -cover ./...
+```
+
+We also provide _Make_ commands for running tests:
+
+```console
+$ make test
+# or
+$ make test-coverage
+```
+
+## 🚀 Development <a name = "development"></a>
+
+### Prerequisites
+
+- [Make](https://www.gnu.org/software/make/#download) is used to gather the required tools and commands for development.
+
+Install the required tools by running the following command:
+
+```console
+$ make tools
+```
+
+Several other _Make_ commands are available for development:
+
+```console
+$ make help
+Usage: make <target>
+
+Targets:
+  test            Run tests
+  test-coverage   Run tests with coverage
+  fmt             Format code
+  fmt-check       Check code format
+  vet             Run go vet
+  lint            Run staticcheck
+  misspell-check  Check spelling
+  misspell        Fix spelling
+  tools           Install tools
+  help            Show this help message
+
+```
 
 ## ✍️ License <a name = "license"></a>
 
