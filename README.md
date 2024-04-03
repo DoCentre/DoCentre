@@ -2,6 +2,9 @@
 
 <div align="center">
 
+![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/DoCentre/DoCentre)
+[![CI](https://github.com/DoCentre/DoCentre/actions/workflows/ci.yml/badge.svg)](https://github.com/DoCentre/DoCentre/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/DoCentre/DoCentre/graph/badge.svg?token=VE3MI85NDN)](https://codecov.io/gh/DoCentre/DoCentre)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 </div>
