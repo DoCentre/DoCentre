@@ -5,6 +5,7 @@
 ![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/DoCentre/DoCentre)
 [![CI](https://github.com/DoCentre/DoCentre/actions/workflows/ci.yml/badge.svg)](https://github.com/DoCentre/DoCentre/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/gh/DoCentre/DoCentre/graph/badge.svg?token=VE3MI85NDN)](https://codecov.io/gh/DoCentre/DoCentre)
+[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 </div>
@@ -107,6 +108,7 @@ $ make test-coverage
 ### Prerequisites
 
 - [Make](https://www.gnu.org/software/make/#download) is used to gather the required tools and commands for development.
+- [pre-commit](https://pre-commit.com/#install) is used to run checks before committing changes.
 
 Install the required tools by running the following command:
 
@@ -133,6 +135,21 @@ Targets:
   help            Show this help message
 
 ```
+
+Install pre-commit hooks:
+
+```console
+$ pre-commit install
+pre-commit installed at .git/hooks/pre-commit
+```
+
+If the pre-commit is installed successfully, you can run the following command to check all files:
+
+```console
+$ pre-commit run --all-files
+```
+
+Before future committing, various checks will be performed on the changed files, Before future commits, various checks will be performed on the changed files, and fixes will be applied automatically if possible.
 
 ## ✍️ License <a name = "license"></a>
 
