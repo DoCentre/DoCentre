@@ -18,3 +18,13 @@ repos:
     hooks:
       - id: conventional-pre-commit
         stages: [commit-msg]
+
+-   repo: local
+    hooks:
+      - id: fmt
+        name: format code
+        entry: make fmt
+        language: system
+        types: [go]
+        always_run: true
+        pass_filenames: false
