@@ -6,6 +6,7 @@
 [![CI](https://github.com/DoCentre/DoCentre/actions/workflows/ci.yml/badge.svg)](https://github.com/DoCentre/DoCentre/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/gh/DoCentre/DoCentre/graph/badge.svg?token=VE3MI85NDN)](https://codecov.io/gh/DoCentre/DoCentre)
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
+[![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-%23FE5196?logo=conventionalcommits&logoColor=white)](https://conventionalcommits.org)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 </div>
@@ -136,20 +137,28 @@ Targets:
 
 ```
 
-Install pre-commit hooks:
+### Git Hooks
+
+Install _pre-commit_ hooks:
 
 ```console
 $ pre-commit install
 pre-commit installed at .git/hooks/pre-commit
+pre-commit installed at .git/hooks/commit-msg
 ```
 
-If the pre-commit is installed successfully, you can run the following command to check all files:
+We have two _pre-commit_ hooks:
+- `pre-commit`: runs checks before committing changes
+- `commit-msg`: checks the commit message format
+
+> [!note]
+> We follow [Conventional Commits](https://www.conventionalcommits.org) for commit messages.
+
+If the `pre-commit` hook is installed successfully, you can run the following command to check all files:
 
 ```console
 $ pre-commit run --all-files
 ```
-
-Before future committing, various checks will be performed on the changed files, Before future commits, various checks will be performed on the changed files, and fixes will be applied automatically if possible.
 
 ## ✍️ License <a name = "license"></a>
 
