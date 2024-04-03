@@ -37,23 +37,14 @@ vet:
 
 .PHONY: lint
 lint:
-	@hash staticcheck > /dev/null 2>&1; if [ $$? -ne 0 ]; then \
-		$(GO) install honnef.co/go/tools/cmd/staticcheck; \
-	fi
 	staticcheck $(PACKAGES)
 
 .PHONY: misspell-check
 misspell-check:
-	@hash misspell > /dev/null 2>&1; if [ $$? -ne 0 ]; then \
-		$(GO) get -u github.com/client9/misspell/cmd/misspell; \
-	fi
 	misspell -error $(GOFILES)
 
 .PHONY: misspell
 misspell:
-	@hash misspell > /dev/null 2>&1; if [ $$? -ne 0 ]; then \
-		$(GO) get -u github.com/client9/misspell/cmd/misspell; \
-	fi
 	misspell -w $(GOFILES)
 
 .PHONY: tools
