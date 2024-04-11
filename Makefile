@@ -8,6 +8,10 @@ TESTTAGS ?= "-test.shuffle=on"
 COVERPROFILE ?= coverage.out
 COVEREXCLUDE ?= "$$^"
 
+.PHONY: docs
+docs:
+	swag init
+
 .PHONY: test
 test:
 	$(GO) test $(TESTTAGS) -v $(PACKAGES)
@@ -49,6 +53,7 @@ misspell:
 
 .PHONY: tools
 tools:
+	$(GO) install github.com/swaggo/swag/cmd/swag@latest; \
 	$(GO) install mvdan.cc/gofumpt@latest; \
 	$(GO) install honnef.co/go/tools/cmd/staticcheck@latest; \
 	$(GO) install github.com/client9/misspell/cmd/misspell@latest;
@@ -58,6 +63,7 @@ help:
 	@echo "Usage: make <target>"
 	@echo ""
 	@echo "Targets:"
+	@echo "  docs            Generate API documentation using swaggo"
 	@echo "  test            Run tests"
 	@echo "  test-coverage   Run tests with coverage"
 	@echo "  fmt             Format code"

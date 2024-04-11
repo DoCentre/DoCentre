@@ -72,6 +72,11 @@ $ curl http://localhost:8080/health
 
 ## 🧾 API Endpoints <a name = "api"></a>
 
+There's also an API documentation available at `localhost:8080/swagger/index.html`.
+Open the URL in your browser to view the API documentation.
+
+The following is a brief overview of the available endpoints:
+
 ### Health Check
 
 - URL: `/health`
@@ -124,6 +129,7 @@ $ make help
 Usage: make <target>
 
 Targets:
+  docs            Generate API documentation using swaggo
   test            Run tests
   test-coverage   Run tests with coverage
   fmt             Format code
