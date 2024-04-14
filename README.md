@@ -21,6 +21,7 @@
 
 - [About](#about)
 - [Getting Started](#getting_started)
+- [Dev Setup](#dev-setup)
 - [API Endpoints](#api)
 - [Running the Tests](#tests)
 - [Development](#development)
@@ -68,6 +69,22 @@ The server should now be running on `localhost:8080`:
 ```console
 $ curl http://localhost:8080/health
 {"message":"health check success"}
+```
+
+
+## Dev Setup
+
+### data migrate with GORM
+
+```bash
+go run migrate/migrate.go
+```
+
+### CompileDaemon 
+[Very simple Compile Daemon for Go]https://github.com/githubnemo/CompileDaemon
+Watches your .go files in a directory and invokes go build if a file changed. 
+```bash
+CompileDaemon -command="./docentre"
 ```
 
 ## 🧾 API Endpoints <a name = "api"></a>

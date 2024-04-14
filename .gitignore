@@ -19,3 +19,10 @@
 
 # Go workspace file
 go.work
+
+# build output
+docentre 
+
+.idea/
+.vscode/
+.env
