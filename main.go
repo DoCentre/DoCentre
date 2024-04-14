@@ -5,9 +5,13 @@ import (
 
 	"github.com/docentre/docentre/docs"
 
+	"github.com/docentre/docentre/controllers"
+	"github.com/docentre/docentre/initializers"
 	"github.com/gin-gonic/gin"
 	swaggerfiles "github.com/swaggo/files"     // swagger embed files
 	ginswagger "github.com/swaggo/gin-swagger" // gin-swagger middleware
+
+	_ "github.com/go-sql-driver/mysql"
 )
 
 type healthResponse struct {
@@ -35,7 +39,16 @@ func SetupRouter() *gin.Engine {
 	return r
 }
 
+func init() {
+	initializers.LoadEnvVariables()
+	initializers.ConnectToDB()
+}
+
 func main() {
 	r := SetupRouter()
-	r.Run(":8080")
+
+	r.POST("/user", controllers.UserCreate)
+	r.POST("/login", controllers.UserLogin)
+
+	r.Run()
 }
