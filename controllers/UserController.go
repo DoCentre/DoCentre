@@ -3,43 +3,48 @@ package controllers
 import (
 	"log"
 
-	"github.com/docentre/docentre/initializers"
-	"github.com/docentre/docentre/models"
+	"github.com/docentre/docentre/services"
 	"github.com/gin-gonic/gin"
 )
 
+type UserDto struct {
+	ID    uint   `json:"id"`
+	Name  string `json:"name"`
+	Email string `json:"email"`
+}
+
 func UserCreate(c *gin.Context) {
-	// get data off request body
+
 	var body struct {
 		Name     string `json:"name" binding:"required"`
 		Email    string `json:"email" binding:"required"`
 		Password string `json:"password" binding:"required"`
 	}
-
 	c.Bind(&body)
 
-	// create user
-	user := models.User{Name: body.Name, Email: body.Email, Password: body.Password}
-	// user := models.User{Name: "Erin", Email: "aaa.com", Password: "123456"}
+	user, err := services.UserCreate(body.Name, body.Email, body.Password)
 
-	result := initializers.DB.Create(&user)
-
-	if result.Error != nil {
+	if err != nil {
+		log.Default().Println(err)
 		c.Status(400)
+		c.JSON(400, gin.H{
+			"msg": "User/Email already exists",
+		})
 		return
 	}
 
-	// user.ID             // returns inserted data's primary key
-	// result.Error        // returns error
-	// result.RowsAffected // returns inserted records count
+	userDto := UserDto{
+		ID:    user.ID,
+		Name:  user.Name,
+		Email: user.Email,
+	}
 
 	c.JSON(200, gin.H{
-		"user": user,
+		"user": userDto,
 	})
 }
 
 func UserLogin(c *gin.Context) {
-	// get data off request body
 	var body struct {
 		Name     string `json:"name" binding:"required"`
 		Password string `json:"password" binding:"required"`
@@ -47,18 +52,24 @@ func UserLogin(c *gin.Context) {
 
 	c.Bind(&body)
 
-	var user models.User
-	result := initializers.DB.Where(&models.User{Name: body.Name, Password: body.Password}).First(&user)
+	user, err := services.UserLogin(body.Name, body.Password)
 
-	if result.Error != nil {
-		log.Default().Println(result.Error)
-		c.JSON(200, gin.H{
+	if err != nil {
+		log.Default().Println(err)
+		c.JSON(404, gin.H{
 			"user": nil,
+			"msg":  "User not found",
 		})
 		return
 	}
 
+	userDto := UserDto{
+		ID:    user.ID,
+		Name:  user.Name,
+		Email: user.Email,
+	}
+
 	c.JSON(200, gin.H{
-		"user": user,
+		"user": userDto,
 	})
 }
