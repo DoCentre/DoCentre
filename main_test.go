@@ -5,12 +5,12 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/docentre/docentre"
+	"github.com/docentre/docentre/router"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestCheckHealth(t *testing.T) {
-	router := main.SetupRouter()
+	router := router.SetupRouter()
 
 	req, _ := http.NewRequest(http.MethodGet, "/health", nil)
 	w := httptest.NewRecorder()

@@ -81,8 +81,9 @@ go run migrate/migrate.go
 ```
 
 ### CompileDaemon 
-[Very simple Compile Daemon for Go]https://github.com/githubnemo/CompileDaemon
-Watches your .go files in a directory and invokes go build if a file changed. 
+[Very simple Compile Daemon for Go](https://github.com/githubnemo/CompileDaemon) \
+Watches your `.go` files in a directory and invokes `go build` if a file changed. 
+
 ```bash
 CompileDaemon -command="./docentre"
 ```
