@@ -9,7 +9,7 @@ import (
 
 func UserCreate(name string, email string, password string) (models.User, error) {
 	user := models.User{Username: name, Email: email, Password: password, Identity: "user"}
-	// user := models.User{Name: "Erin", Email: "aaa.com", Password: "123456"}
+
 	result := initializers.DB.Create(&user)
 
 	if result.Error != nil {

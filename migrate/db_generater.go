@@ -7,7 +7,5 @@ import (
 
 // CreateDatabase creates the tables used in this application.
 func CreateDatabase() {
-	
 	initializers.DB.AutoMigrate(&models.User{})
-
 }

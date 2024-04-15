@@ -15,7 +15,6 @@ type UserDto struct {
 }
 
 func UserCreate(c *gin.Context) {
-
 	var body struct {
 		Username string `json:"username" binding:"required"`
 		Email    string `json:"email" binding:"required"`
@@ -24,7 +23,6 @@ func UserCreate(c *gin.Context) {
 	c.Bind(&body)
 
 	user, err := services.UserCreate(body.Username, body.Email, body.Password)
-
 	if err != nil {
 		log.Default().Println(err)
 		c.Status(400)
@@ -55,7 +53,6 @@ func UserLogin(c *gin.Context) {
 	c.Bind(&body)
 
 	user, err := services.UserLogin(body.Username, body.Password)
-
 	if err != nil {
 		log.Default().Println(err)
 		c.JSON(404, gin.H{
@@ -85,7 +82,6 @@ func GetUsersByUsername(c *gin.Context) {
 	c.Bind(&body)
 
 	users, err := services.GetUsersByUsername(body.Username)
-
 	if err != nil {
 		log.Default().Println(err)
 		c.JSON(200, gin.H{
