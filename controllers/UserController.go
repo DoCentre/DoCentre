@@ -8,21 +8,22 @@ import (
 )
 
 type UserDto struct {
-	ID    uint   `json:"id"`
-	Name  string `json:"name"`
-	Email string `json:"email"`
+	ID       uint   `json:"id"`
+	Username string `json:"username"`
+	Email    string `json:"email"`
+	Identity string `json:"identity"`
 }
 
 func UserCreate(c *gin.Context) {
 
 	var body struct {
-		Name     string `json:"name" binding:"required"`
+		Username string `json:"username" binding:"required"`
 		Email    string `json:"email" binding:"required"`
 		Password string `json:"password" binding:"required"`
 	}
 	c.Bind(&body)
 
-	user, err := services.UserCreate(body.Name, body.Email, body.Password)
+	user, err := services.UserCreate(body.Username, body.Email, body.Password)
 
 	if err != nil {
 		log.Default().Println(err)
@@ -34,9 +35,10 @@ func UserCreate(c *gin.Context) {
 	}
 
 	userDto := UserDto{
-		ID:    user.ID,
-		Name:  user.Name,
-		Email: user.Email,
+		ID:       user.ID,
+		Username: user.Username,
+		Email:    user.Email,
+		Identity: user.Identity,
 	}
 
 	c.JSON(200, gin.H{
@@ -46,13 +48,13 @@ func UserCreate(c *gin.Context) {
 
 func UserLogin(c *gin.Context) {
 	var body struct {
-		Name     string `json:"name" binding:"required"`
+		Username string `json:"username" binding:"required"`
 		Password string `json:"password" binding:"required"`
 	}
 
 	c.Bind(&body)
 
-	user, err := services.UserLogin(body.Name, body.Password)
+	user, err := services.UserLogin(body.Username, body.Password)
 
 	if err != nil {
 		log.Default().Println(err)
@@ -64,12 +66,48 @@ func UserLogin(c *gin.Context) {
 	}
 
 	userDto := UserDto{
-		ID:    user.ID,
-		Name:  user.Name,
-		Email: user.Email,
+		ID:       user.ID,
+		Username: user.Username,
+		Email:    user.Email,
+		Identity: user.Identity,
 	}
 
 	c.JSON(200, gin.H{
 		"user": userDto,
+	})
+}
+
+func GetUsersByUsername(c *gin.Context) {
+	var body struct {
+		Username string `json:"username" binding:"required"`
+	}
+
+	c.Bind(&body)
+
+	users, err := services.GetUsersByUsername(body.Username)
+
+	if err != nil {
+		log.Default().Println(err)
+		c.JSON(200, gin.H{
+			"users": []UserDto{},
+			"msg":   "Users not found",
+		})
+		return
+	}
+
+	var usersDto []UserDto
+
+	for _, user := range users {
+		userDto := UserDto{
+			ID:       user.ID,
+			Username: user.Username,
+			Email:    user.Email,
+			Identity: user.Identity,
+		}
+		usersDto = append(usersDto, userDto)
+	}
+
+	c.JSON(200, gin.H{
+		"users": usersDto,
 	})
 }
