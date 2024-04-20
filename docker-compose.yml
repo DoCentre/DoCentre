@@ -1,0 +1,24 @@
+services:
+  server:
+    hostname: server
+    build: .
+    network_mode: host
+    user: 1000:1000
+    depends_on:
+      - db
+    volumes:
+      - .:/home/user/docentre
+    working_dir: /home/user/docentre
+    # As `depends_on` does not wait for the container to be ready,
+    # we need to add a sleep command to ensure the database is ready before the server starts.
+    command: ["/bin/sh", "-c", "sleep 5 && go run ."]
+
+  db:
+    image: mysql
+    network_mode: host
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - .db:/var/lib/mysql
+      # The init script under ./db-init will be executed when the container is first created.
+      - ./db-init:/docker-entrypoint-initdb.d

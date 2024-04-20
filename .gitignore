@@ -20,9 +20,11 @@
 # Go workspace file
 go.work
 
-# build output
-docentre 
+# Build output
+docentre
+
+# Database data
+.db/
 
 .idea/
 .vscode/
-
