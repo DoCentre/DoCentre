@@ -11,7 +11,7 @@ services:
     working_dir: /home/user/docentre
     # As `depends_on` does not wait for the container to be ready,
     # we need to add a sleep command to ensure the database is ready before the server starts.
-    command: ["/bin/sh", "-c", "sleep 5 && go run ."]
+    command: ["/bin/sh", "-c", "sleep 5 && ./docker-entrypoint.sh"]
 
   db:
     image: mysql
