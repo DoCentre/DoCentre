@@ -1,9 +1,13 @@
 services:
   server:
     hostname: server
-    build: .
+    build:
+        context: .
+        args:
+          - UID=1000
+          - GID=1000
+          - USER=user
     network_mode: host
-    user: 1000:1000
     depends_on:
       - db
     volumes:
