@@ -22,7 +22,9 @@ services:
     network_mode: host
     environment:
       MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: my_user
+      MYSQL_PASSWORD: my_password
+      MYSQL_DATABASE: docentre
     volumes:
       - .db:/var/lib/mysql
-      # The init script under ./db-init will be executed when the container is first created.
-      - ./db-init:/docker-entrypoint-initdb.d
+      # The init script under ./db-init will be executed when the container is first created
