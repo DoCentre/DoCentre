@@ -9,13 +9,13 @@ services:
                 - USER=user
         network_mode: host
         depends_on:
-            - db
+            db:
+                condition: service_healthy
         volumes:
             - .:/home/user/docentre
         working_dir: /home/user/docentre
-        # As `depends_on` does not wait for the container to be ready,
-        # we need to add a sleep command to ensure the database is ready before the server starts.
-        command: ["/bin/sh", "-c", "sleep 5 && ./docker-entrypoint.sh"]
+        entrypoint:
+            - ./docker-entrypoint.sh
 
     db:
         image: mysql
@@ -27,3 +27,9 @@ services:
             MYSQL_DATABASE: docentre
         volumes:
             - .db:/var/lib/mysql
+        healthcheck:
+            test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+            interval: 5s
+            timeout: 3s
+            retries: 30
+            start_period: 15s
