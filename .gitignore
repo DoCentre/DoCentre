@@ -22,6 +22,7 @@ go.work
 
 # Build output
 docentre
+.cache/
 
 # Database data
 .db/
