@@ -1,31 +1,36 @@
 
-mysql in docker 
+
+### 使用 docker 建立 MySQL
 ```bash
-$ docker run --name docentre-mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=root -d mysql
-$ docker exec -it docentre-mysql bash
+$ docker run --name docentre-sql \
+-p 3306:3306 \
+-e MYSQL_ROOT_PASSWORD=root \
+-e MYSQL_DATABASE=docentre \
+-e MYSQL_USER=my_user \
+-e MYSQL_PASSWORD=my_password \
+-d mysql
 ```
 
-使用 MySQL 的 root 管理者帳號登入：
+此時已經可以跑後端 service
+
+### 若需進入 MySQL 容器確認
 
 ```
-$ mysql -u root //無密碼
-$ mysql -u root -p //需要密碼
+$ docker exec -it docentre-sql bash
 ```
 
 ```
--- 新增資料庫
-CREATE DATABASE IF NOT EXISTS `docentre`;
--- 新增 my_user/my_password，並授予 docentre 資料庫所有權限
-CREATE USER 'my_user'@'localhost' IDENTIFIED BY 'my_password';
-GRANT ALL PRIVILEGES ON docentre.* TO 'my_user'@'localhost';
-```
-
-退出 root 改用 my_user 登入
-```
+$ mysql -u root -p
+Password: root
+// or
 $ mysql -u my_user -p
+Password: my_password
 ```
 
-connection string
-```
-jdbc:mysql://localhost:3306/docentre
-```
+### 可視化工具連接 MySQL connection string
+
+- username/password: 
+  - root/root or my_user/my_password
+- database: docentre
+- host: localhost
+- port: 3306
