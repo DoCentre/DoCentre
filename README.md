@@ -38,7 +38,7 @@ _DoCentre_, **Do**cument **Centre**, is a robust document management platform de
 
 ### Prerequisites
 
-- The _Go_ programming language (version 1.22 or later is recommended) is required to run the server. You can download and install Go from the [official website](https://go.dev/doc/install).
+- [Docker](https://docs.docker.com/get-docker/) is used to run the server and database in containers with uniform environments.
 
 ### Starting the Server
 
@@ -58,10 +58,10 @@ $ cd DoCentre
 $ cd DoCentre-main
 ```
 
-3. Run the server:
+3. Run the containers:
 
 ```console
-$ go run main.go
+$ docker compose up
 ```
 
 The server should now be running on `localhost:8080`:
@@ -69,23 +69,6 @@ The server should now be running on `localhost:8080`:
 ```console
 $ curl http://localhost:8080/health
 {"message":"health check success"}
-```
-
-
-## Dev Setup
-
-### data migrate with GORM
-
-```bash
-go run migrate/migrate.go
-```
-
-### CompileDaemon 
-[Very simple Compile Daemon for Go](https://github.com/githubnemo/CompileDaemon) \
-Watches your `.go` files in a directory and invokes `go build` if a file changed. 
-
-```bash
-CompileDaemon -command="./docentre"
 ```
 
 ## 🧾 API Endpoints <a name = "api"></a>
@@ -131,6 +114,7 @@ $ make test-coverage
 
 ### Prerequisites
 
+- The [Go](https://go.dev/doc/install) programming language (version 1.22 or later is recommended) is used to develop the server.
 - [Make](https://www.gnu.org/software/make/#download) is used to gather the required tools and commands for development.
 - [pre-commit](https://pre-commit.com/#install) is used to run checks before committing changes.
 
@@ -160,6 +144,20 @@ Targets:
   help            Show this help message
 
 ```
+
+### Docker Compose
+
+The `docker-compose.yml` file is used to run the server and database in containers, with the current directory mounted as a volume. The database files are stored in the `.db/` directory.
+
+Additionally, the server is configured to automatically reload when changes are made to the source code using [CompileDaemon](https://github.com/githubnemo/CompileDaemon).
+
+To start the server and database, use the following command:
+
+```console
+$ docker compose up
+```
+
+You can then develop the server on your local machine.
 
 ### Git Hooks
 

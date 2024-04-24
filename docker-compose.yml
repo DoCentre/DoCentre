@@ -1,0 +1,35 @@
+services:
+    server:
+        hostname: server
+        build:
+            context: .
+            args:
+                - UID=1000
+                - GID=1000
+                - USER=user
+        network_mode: host
+        depends_on:
+            db:
+                condition: service_healthy
+        volumes:
+            - .:/home/user/docentre
+        working_dir: /home/user/docentre
+        entrypoint:
+            - ./docker-entrypoint.sh
+
+    db:
+        image: mysql
+        network_mode: host
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_USER: my_user
+            MYSQL_PASSWORD: my_password
+            MYSQL_DATABASE: docentre
+        volumes:
+            - .db:/var/lib/mysql
+        healthcheck:
+            test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+            interval: 5s
+            timeout: 3s
+            retries: 30
+            start_period: 15s
