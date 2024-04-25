@@ -30,7 +30,7 @@ func CheckHealth(c *gin.Context) {
 func setSwagger(r *gin.Engine) {
 	docs.SwaggerInfo.Title = "Docentre API"
 	docs.SwaggerInfo.Description = "This is the API documentation for Docentre."
-	r.GET("/swagger/*any", ginswagger.WrapHandler(swaggerfiles.Handler))
+	r.GET("/swagger/*any", ginswagger.WrapHandler(swaggerfiles.Handler, ginswagger.DefaultModelsExpandDepth(-1)))
 }
 
 func setHealthCheckController(r *gin.Engine) {
