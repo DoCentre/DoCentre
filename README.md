@@ -118,12 +118,6 @@ $ make test-coverage
 - [Make](https://www.gnu.org/software/make/#download) is used to gather the required tools and commands for development.
 - [pre-commit](https://pre-commit.com/#install) is used to run checks before committing changes.
 
-Install the required tools by running the following command:
-
-```console
-$ make tools
-```
-
 Several other _Make_ commands are available for development:
 
 ```console
@@ -140,10 +134,11 @@ Targets:
   lint            Run staticcheck
   misspell-check  Check spelling
   misspell        Fix spelling
-  tools           Install tools
   help            Show this help message
 
 ```
+
+Necessary tools are installed on demand when their commands are executed.
 
 ### Docker Compose
 
