@@ -43,11 +43,17 @@ func setUserController(r *gin.Engine) {
 	r.POST("/users", controllers.GetUsersByUsername)
 }
 
+func setDocumentController(r *gin.Engine) {
+	r.POST("/document", controllers.CreateDocument)
+	// TODO r.PATCH("/documents/:document_id", controllers.UpdateDocument)
+	// TODO r.PATCH("/documents/:document_id/status", controllers.SetDocumentStatus)
+}
+
 func SetupRouter() *gin.Engine {
 	r := gin.Default()
 	setHealthCheckController(r)
 	setUserController(r)
-
+	setDocumentController(r)
 	setSwagger(r)
 
 	return r
