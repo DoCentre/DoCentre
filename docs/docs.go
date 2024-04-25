@@ -82,9 +82,70 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/user/create": {
+            "post": {
+                "description": "Create a new user; the user will be created with the identity \"user\".",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Create a user",
+                "parameters": [
+                    {
+                        "description": " ",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controllers.userCreateRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.userCreateSuccessResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.userCreateExistedResponse"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
+        "controllers.UserDto": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "example": "email@mail.com"
+                },
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "identity": {
+                    "type": "string",
+                    "example": "user"
+                },
+                "username": {
+                    "type": "string",
+                    "example": "username"
+                }
+            }
+        },
         "controllers.createDocumentFailedResponse": {
             "type": "object",
             "properties": {
@@ -121,6 +182,45 @@ const docTemplate = `{
                 "document_id": {
                     "type": "integer",
                     "example": 10
+                }
+            }
+        },
+        "controllers.userCreateExistedResponse": {
+            "type": "object",
+            "properties": {
+                "msg": {
+                    "type": "string",
+                    "example": "User/Email already exists"
+                }
+            }
+        },
+        "controllers.userCreateRequest": {
+            "type": "object",
+            "required": [
+                "email",
+                "password",
+                "username"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "example": "email@mail.com"
+                },
+                "password": {
+                    "type": "string",
+                    "example": "password"
+                },
+                "username": {
+                    "type": "string",
+                    "example": "username"
+                }
+            }
+        },
+        "controllers.userCreateSuccessResponse": {
+            "type": "object",
+            "properties": {
+                "user": {
+                    "$ref": "#/definitions/controllers.UserDto"
                 }
             }
         },

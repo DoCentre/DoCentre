@@ -8,26 +8,43 @@ import (
 )
 
 type UserDto struct {
-	ID       uint   `json:"id"`
-	Username string `json:"username"`
-	Email    string `json:"email"`
-	Identity string `json:"identity"`
+	ID       uint   `json:"id" example:"1"`
+	Username string `json:"username" example:"username"`
+	Email    string `json:"email" example:"email@mail.com"`
+	Identity string `json:"identity" example:"user"`
 }
 
+type userCreateRequest struct {
+	Username string `json:"username" binding:"required" example:"username"`
+	Email    string `json:"email" binding:"required" example:"email@mail.com"`
+	Password string `json:"password" binding:"required" example:"password"`
+}
+type userCreateExistedResponse struct {
+	Msg string `json:"msg" example:"User/Email already exists"`
+}
+type userCreateSuccessResponse struct {
+	User UserDto `json:"user"`
+}
+
+// @Summary Create a user
+// @Description Create a new user; the user will be created with the identity "user".
+// @Tags User
+// @Accept json
+// @Produce json
+// @Param body body userCreateRequest true " "
+// @Success 200 {object} userCreateSuccessResponse
+// @Failure 400 {object} userCreateExistedResponse
+// @Router /user/create [post]
 func UserCreate(c *gin.Context) {
-	var body struct {
-		Username string `json:"username" binding:"required"`
-		Email    string `json:"email" binding:"required"`
-		Password string `json:"password" binding:"required"`
-	}
+	var body userCreateRequest
 	c.Bind(&body)
 
 	user, err := services.UserCreate(body.Username, body.Email, body.Password)
 	if err != nil {
 		log.Default().Println(err)
 		c.Status(400)
-		c.JSON(400, gin.H{
-			"msg": "User/Email already exists",
+		c.JSON(400, userCreateExistedResponse{
+			Msg: "User/Email already exists",
 		})
 		return
 	}
@@ -39,8 +56,8 @@ func UserCreate(c *gin.Context) {
 		Identity: user.Identity,
 	}
 
-	c.JSON(200, gin.H{
-		"user": userDto,
+	c.JSON(200, userCreateSuccessResponse{
+		User: userDto,
 	})
 }
 
