@@ -29,7 +29,7 @@ Password: my_password
 
 ### 可視化工具連接 MySQL connection string
 
-- username/password: 
+- username/password:
   - root/root or my_user/my_password
 - database: docentre
 - host: localhost
