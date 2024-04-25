@@ -3,7 +3,11 @@
 GO ?= go
 GOFMT ?= gofumpt
 PACKAGES ?= $(shell $(GO) list ./...)
-GOFILES := $(shell find . -name "*.go")
+# We do not look at the special directories that are prefixed with ".",
+# such as ".git", ".github", ".db", etc,
+# because they serve as a special purpose and may need root permission to access.
+# For how to exclude directories, see https://stackoverflow.com/a/1489405.
+GOFILES := $(shell find . -path "./.*" -prune -o -name "*.go" -print)
 TESTTAGS ?= "-test.shuffle=on"
 COVERPROFILE ?= coverage.out
 COVEREXCLUDE ?= "docs"
