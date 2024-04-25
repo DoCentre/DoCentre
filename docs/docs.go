@@ -15,6 +15,52 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/document": {
+            "post": {
+                "description": "Create a new document that belongs to the author; the author has to be a existing user.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "document"
+                ],
+                "summary": "Create document",
+                "parameters": [
+                    {
+                        "description": " ",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controllers.createDocumentRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.createDocumentSuccessResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.createDocumentInvalidResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.createDocumentFailedResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/health": {
             "get": {
                 "consumes": [
@@ -31,7 +77,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/main.healthResponse"
+                            "$ref": "#/definitions/router.healthResponse"
                         }
                     }
                 }
@@ -39,7 +85,46 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "main.healthResponse": {
+        "controllers.createDocumentFailedResponse": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string",
+                    "example": "Failed to create document"
+                }
+            }
+        },
+        "controllers.createDocumentInvalidResponse": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string",
+                    "example": "Invalid request body"
+                }
+            }
+        },
+        "controllers.createDocumentRequest": {
+            "type": "object",
+            "required": [
+                "author_id"
+            ],
+            "properties": {
+                "author_id": {
+                    "type": "integer",
+                    "example": 1
+                }
+            }
+        },
+        "controllers.createDocumentSuccessResponse": {
+            "type": "object",
+            "properties": {
+                "document_id": {
+                    "type": "integer",
+                    "example": 10
+                }
+            }
+        },
+        "router.healthResponse": {
             "type": "object",
             "properties": {
                 "message": {

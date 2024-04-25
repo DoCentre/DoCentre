@@ -1,5 +1,31 @@
 definitions:
-  main.healthResponse:
+  controllers.createDocumentFailedResponse:
+    properties:
+      error:
+        example: Failed to create document
+        type: string
+    type: object
+  controllers.createDocumentInvalidResponse:
+    properties:
+      error:
+        example: Invalid request body
+        type: string
+    type: object
+  controllers.createDocumentRequest:
+    properties:
+      author_id:
+        example: 1
+        type: integer
+    required:
+    - author_id
+    type: object
+  controllers.createDocumentSuccessResponse:
+    properties:
+      document_id:
+        example: 10
+        type: integer
+    type: object
+  router.healthResponse:
     properties:
       message:
         type: string
@@ -7,6 +33,37 @@ definitions:
 info:
   contact: {}
 paths:
+  /document:
+    post:
+      consumes:
+      - application/json
+      description: Create a new document that belongs to the author; the author has
+        to be a existing user.
+      parameters:
+      - description: ' '
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.createDocumentRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.createDocumentSuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.createDocumentInvalidResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/controllers.createDocumentFailedResponse'
+      summary: Create document
+      tags:
+      - document
   /health:
     get:
       consumes:
@@ -17,7 +74,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/main.healthResponse'
+            $ref: '#/definitions/router.healthResponse'
       summary: Check health
       tags:
       - health
