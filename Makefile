@@ -10,6 +10,10 @@ COVEREXCLUDE ?= "docs"
 
 .PHONY: docs
 docs:
+	@hash swag > /dev/null 2>&1; if [ $$? -ne 0 ]; then \
+		echo "swag is not installed. Installing..."; \
+		$(GO) install github.com/swaggo/swag/cmd/swag@latest; \
+	fi
 	swag init
 
 .PHONY: test
@@ -24,10 +28,18 @@ test-coverage:
 
 .PHONY: fmt
 fmt:
+	@hash gofumpt > /dev/null 2>&1; if [ $$? -ne 0 ]; then \
+		echo "gofumpt is not installed. Installing..."; \
+		$(GO) install mvdan.cc/gofumpt@latest; \
+	fi
 	$(GOFMT) -w $(GOFILES)
 
 .PHONY: fmt-check
 fmt-check:
+	@hash gofumpt > /dev/null 2>&1; if [ $$? -ne 0 ]; then \
+		echo "gofumpt is not installed. Installing..."; \
+		$(GO) install mvdan.cc/gofumpt@latest; \
+	fi
 	@diff=$$($(GOFMT) -d $(GOFILES)); \
 	if [ -n "$$diff" ]; then \
 		echo "Please run 'make fmt' and commit the result:"; \
@@ -41,22 +53,27 @@ vet:
 
 .PHONY: lint
 lint:
+	@hash staticcheck > /dev/null 2>&1; if [ $$? -ne 0 ]; then \
+		echo "staticcheck is not installed. Installing..."; \
+		$(GO) install honnef.co/go/tools/cmd/staticcheck@latest; \
+	fi
 	staticcheck $(PACKAGES)
 
 .PHONY: misspell-check
 misspell-check:
+	@hash misspell > /dev/null 2>&1; if [ $$? -ne 0 ]; then \
+		echo "misspell is not installed. Installing..."; \
+		$(GO) install github.com/client9/misspell/cmd/misspell@latest; \
+	fi
 	misspell -error $(GOFILES)
 
 .PHONY: misspell
 misspell:
+	@hash misspell > /dev/null 2>&1; if [ $$? -ne 0 ]; then \
+		echo "misspell is not installed. Installing..."; \
+		$(GO) install github.com/client9/misspell/cmd/misspell@latest; \
+	fi
 	misspell -w $(GOFILES)
-
-.PHONY: tools
-tools:
-	$(GO) install github.com/swaggo/swag/cmd/swag@latest; \
-	$(GO) install mvdan.cc/gofumpt@latest; \
-	$(GO) install honnef.co/go/tools/cmd/staticcheck@latest; \
-	$(GO) install github.com/client9/misspell/cmd/misspell@latest;
 
 .PHONY: help
 help:
@@ -72,5 +89,4 @@ help:
 	@echo "  lint            Run staticcheck"
 	@echo "  misspell-check  Check spelling"
 	@echo "  misspell        Fix spelling"
-	@echo "  tools           Install tools"
 	@echo "  help            Show this help message"
