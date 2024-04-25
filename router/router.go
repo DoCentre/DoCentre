@@ -11,18 +11,18 @@ import (
 	ginswagger "github.com/swaggo/gin-swagger" // gin-swagger middleware
 )
 
-type healthResponse struct {
-	Message string `json:"message"`
-}
-
 // @Summary Check health
 // @Tags health
 // @Accept json
 // @Produce json
-// @Success 200 {object} healthResponse
+// @Success 200 {object} router.CheckHealth.responseBody
 // @Router /health [get]
 func CheckHealth(c *gin.Context) {
-	c.JSON(http.StatusOK, healthResponse{
+	type responseBody struct {
+		Message string `json:"message"`
+	}
+
+	c.JSON(http.StatusOK, responseBody{
 		Message: "health check success",
 	})
 }

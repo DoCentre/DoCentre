@@ -35,7 +35,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/controllers.createDocumentRequest"
+                            "$ref": "#/definitions/controllers.CreateDocument.requestBody"
                         }
                     }
                 ],
@@ -43,19 +43,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/controllers.createDocumentSuccessResponse"
+                            "$ref": "#/definitions/controllers.CreateDocument.successResponseBody"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/controllers.createDocumentInvalidResponse"
+                            "$ref": "#/definitions/controllers.CreateDocument.invalidResponseBody"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/controllers.createDocumentFailedResponse"
+                            "$ref": "#/definitions/controllers.CreateDocument.failedResponseBody"
                         }
                     }
                 }
@@ -77,7 +77,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/router.healthResponse"
+                            "$ref": "#/definitions/router.CheckHealth.responseBody"
                         }
                     }
                 }
@@ -103,7 +103,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/controllers.userCreateRequest"
+                            "$ref": "#/definitions/controllers.UserCreate.requestBody"
                         }
                     }
                 ],
@@ -111,13 +111,13 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/controllers.userCreateSuccessResponse"
+                            "$ref": "#/definitions/controllers.UserCreate.successResponseBody"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/controllers.userCreateExistedResponse"
+                            "$ref": "#/definitions/controllers.UserCreate.existedResponseBody"
                         }
                     }
                 }
@@ -125,28 +125,7 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "controllers.UserDto": {
-            "type": "object",
-            "properties": {
-                "email": {
-                    "type": "string",
-                    "example": "email@mail.com"
-                },
-                "id": {
-                    "type": "integer",
-                    "example": 1
-                },
-                "identity": {
-                    "type": "string",
-                    "example": "user"
-                },
-                "username": {
-                    "type": "string",
-                    "example": "username"
-                }
-            }
-        },
-        "controllers.createDocumentFailedResponse": {
+        "controllers.CreateDocument.failedResponseBody": {
             "type": "object",
             "properties": {
                 "error": {
@@ -155,7 +134,7 @@ const docTemplate = `{
                 }
             }
         },
-        "controllers.createDocumentInvalidResponse": {
+        "controllers.CreateDocument.invalidResponseBody": {
             "type": "object",
             "properties": {
                 "error": {
@@ -164,7 +143,7 @@ const docTemplate = `{
                 }
             }
         },
-        "controllers.createDocumentRequest": {
+        "controllers.CreateDocument.requestBody": {
             "type": "object",
             "required": [
                 "author_id"
@@ -176,7 +155,7 @@ const docTemplate = `{
                 }
             }
         },
-        "controllers.createDocumentSuccessResponse": {
+        "controllers.CreateDocument.successResponseBody": {
             "type": "object",
             "properties": {
                 "document_id": {
@@ -185,7 +164,7 @@ const docTemplate = `{
                 }
             }
         },
-        "controllers.userCreateExistedResponse": {
+        "controllers.UserCreate.existedResponseBody": {
             "type": "object",
             "properties": {
                 "msg": {
@@ -194,7 +173,7 @@ const docTemplate = `{
                 }
             }
         },
-        "controllers.userCreateRequest": {
+        "controllers.UserCreate.requestBody": {
             "type": "object",
             "required": [
                 "email",
@@ -216,7 +195,7 @@ const docTemplate = `{
                 }
             }
         },
-        "controllers.userCreateSuccessResponse": {
+        "controllers.UserCreate.successResponseBody": {
             "type": "object",
             "properties": {
                 "user": {
@@ -224,7 +203,28 @@ const docTemplate = `{
                 }
             }
         },
-        "router.healthResponse": {
+        "controllers.UserDto": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "example": "email@mail.com"
+                },
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "identity": {
+                    "type": "string",
+                    "example": "user"
+                },
+                "username": {
+                    "type": "string",
+                    "example": "username"
+                }
+            }
+        },
+        "router.CheckHealth.responseBody": {
             "type": "object",
             "properties": {
                 "message": {

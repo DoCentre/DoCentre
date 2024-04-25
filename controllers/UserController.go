@@ -14,36 +14,36 @@ type UserDto struct {
 	Identity string `json:"identity" example:"user"`
 }
 
-type userCreateRequest struct {
-	Username string `json:"username" binding:"required" example:"username"`
-	Email    string `json:"email" binding:"required" example:"email@mail.com"`
-	Password string `json:"password" binding:"required" example:"password"`
-}
-type userCreateExistedResponse struct {
-	Msg string `json:"msg" example:"User/Email already exists"`
-}
-type userCreateSuccessResponse struct {
-	User UserDto `json:"user"`
-}
-
 // @Summary Create a user
 // @Description Create a new user; the user will be created with the identity "user".
 // @Tags User
 // @Accept json
 // @Produce json
-// @Param body body userCreateRequest true " "
-// @Success 200 {object} userCreateSuccessResponse
-// @Failure 400 {object} userCreateExistedResponse
+// @Param body body controllers.UserCreate.requestBody true " "
+// @Success 200 {object} controllers.UserCreate.successResponseBody
+// @Failure 400 {object} controllers.UserCreate.existedResponseBody
 // @Router /user/create [post]
 func UserCreate(c *gin.Context) {
-	var body userCreateRequest
+	type requestBody struct {
+		Username string `json:"username" binding:"required" example:"username"`
+		Email    string `json:"email" binding:"required" example:"email@mail.com"`
+		Password string `json:"password" binding:"required" example:"password"`
+	}
+	type existedResponseBody struct {
+		Msg string `json:"msg" example:"User/Email already exists"`
+	}
+	type successResponseBody struct {
+		User UserDto `json:"user"`
+	}
+
+	var body requestBody
 	c.Bind(&body)
 
 	user, err := services.UserCreate(body.Username, body.Email, body.Password)
 	if err != nil {
 		log.Default().Println(err)
 		c.Status(400)
-		c.JSON(400, userCreateExistedResponse{
+		c.JSON(400, existedResponseBody{
 			Msg: "User/Email already exists",
 		})
 		return
@@ -56,7 +56,7 @@ func UserCreate(c *gin.Context) {
 		Identity: user.Identity,
 	}
 
-	c.JSON(200, userCreateSuccessResponse{
+	c.JSON(200, successResponseBody{
 		User: userDto,
 	})
 }

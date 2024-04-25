@@ -1,32 +1,17 @@
 definitions:
-  controllers.UserDto:
-    properties:
-      email:
-        example: email@mail.com
-        type: string
-      id:
-        example: 1
-        type: integer
-      identity:
-        example: user
-        type: string
-      username:
-        example: username
-        type: string
-    type: object
-  controllers.createDocumentFailedResponse:
+  controllers.CreateDocument.failedResponseBody:
     properties:
       error:
         example: Failed to create document
         type: string
     type: object
-  controllers.createDocumentInvalidResponse:
+  controllers.CreateDocument.invalidResponseBody:
     properties:
       error:
         example: Invalid request body
         type: string
     type: object
-  controllers.createDocumentRequest:
+  controllers.CreateDocument.requestBody:
     properties:
       author_id:
         example: 1
@@ -34,19 +19,19 @@ definitions:
     required:
     - author_id
     type: object
-  controllers.createDocumentSuccessResponse:
+  controllers.CreateDocument.successResponseBody:
     properties:
       document_id:
         example: 10
         type: integer
     type: object
-  controllers.userCreateExistedResponse:
+  controllers.UserCreate.existedResponseBody:
     properties:
       msg:
         example: User/Email already exists
         type: string
     type: object
-  controllers.userCreateRequest:
+  controllers.UserCreate.requestBody:
     properties:
       email:
         example: email@mail.com
@@ -62,12 +47,27 @@ definitions:
     - password
     - username
     type: object
-  controllers.userCreateSuccessResponse:
+  controllers.UserCreate.successResponseBody:
     properties:
       user:
         $ref: '#/definitions/controllers.UserDto'
     type: object
-  router.healthResponse:
+  controllers.UserDto:
+    properties:
+      email:
+        example: email@mail.com
+        type: string
+      id:
+        example: 1
+        type: integer
+      identity:
+        example: user
+        type: string
+      username:
+        example: username
+        type: string
+    type: object
+  router.CheckHealth.responseBody:
     properties:
       message:
         type: string
@@ -87,22 +87,22 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/controllers.createDocumentRequest'
+          $ref: '#/definitions/controllers.CreateDocument.requestBody'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/controllers.createDocumentSuccessResponse'
+            $ref: '#/definitions/controllers.CreateDocument.successResponseBody'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/controllers.createDocumentInvalidResponse'
+            $ref: '#/definitions/controllers.CreateDocument.invalidResponseBody'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/controllers.createDocumentFailedResponse'
+            $ref: '#/definitions/controllers.CreateDocument.failedResponseBody'
       summary: Create document
       tags:
       - document
@@ -116,7 +116,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/router.healthResponse'
+            $ref: '#/definitions/router.CheckHealth.responseBody'
       summary: Check health
       tags:
       - health
@@ -131,18 +131,18 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/controllers.userCreateRequest'
+          $ref: '#/definitions/controllers.UserCreate.requestBody'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/controllers.userCreateSuccessResponse'
+            $ref: '#/definitions/controllers.UserCreate.successResponseBody'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/controllers.userCreateExistedResponse'
+            $ref: '#/definitions/controllers.UserCreate.existedResponseBody'
       summary: Create a user
       tags:
       - User
