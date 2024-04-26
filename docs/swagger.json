@@ -14,7 +14,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "document"
+                    "Document"
                 ],
                 "summary": "Create document",
                 "parameters": [
@@ -59,7 +59,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "health"
+                    "Health"
                 ],
                 "summary": "Check health",
                 "responses": {

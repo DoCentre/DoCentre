@@ -10,7 +10,7 @@ import (
 
 // @Summary Create document
 // @Description Create a new document that belongs to the author; the author has to be a existing user.
-// @Tags document
+// @Tags Document
 // @Accept json
 // @Produce json
 // @Param body body controllers.CreateDocument.requestBody true " "

@@ -12,7 +12,7 @@ import (
 )
 
 // @Summary Check health
-// @Tags health
+// @Tags Health
 // @Accept json
 // @Produce json
 // @Success 200 {object} router.CheckHealth.responseBody

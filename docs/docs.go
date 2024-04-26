@@ -25,7 +25,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "document"
+                    "Document"
                 ],
                 "summary": "Create document",
                 "parameters": [
@@ -70,7 +70,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "health"
+                    "Health"
                 ],
                 "summary": "Check health",
                 "responses": {
