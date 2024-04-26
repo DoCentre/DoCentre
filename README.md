@@ -76,17 +76,6 @@ $ curl http://localhost:8080/health
 There's also an API documentation available at `localhost:8080/swagger/index.html`.
 Open the URL in your browser to view the API documentation.
 
-The following is a brief overview of the available endpoints:
-
-### Health Check
-
-- URL: `/health`
-- Method: `GET`
-- Description: Check the health of the server.
-- Response:
-  - `200 OK`: `{"message":"health check success"}`
-  - `4xx` or `5xx`
-
 ## 🔧 Running the Tests <a name = "tests"></a>
 
 _DoCentre_ uses the `testing` package in _Go_ to write tests.
