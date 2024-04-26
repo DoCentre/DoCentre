@@ -25,6 +25,34 @@ definitions:
         example: 10
         type: integer
     type: object
+  controllers.GetUsersByUsername.requestBody:
+    properties:
+      username:
+        example: username
+        type: string
+    required:
+    - username
+    type: object
+  controllers.GetUsersByUsername.successResponseBody:
+    properties:
+      users:
+        items:
+          $ref: '#/definitions/controllers.UserDto'
+        type: array
+    type: object
+  controllers.GetUsersByUsername.usersNotFoundResponseBody:
+    properties:
+      msg:
+        example: Users not found
+        type: string
+      users:
+        description: |-
+          Should always be empty.
+          XXX: Consider removing the field.
+        items:
+          $ref: '#/definitions/controllers.UserDto'
+        type: array
+    type: object
   controllers.UserCreate.existedResponseBody:
     properties:
       msg:
@@ -94,7 +122,7 @@ definitions:
         - $ref: '#/definitions/controllers.UserDto'
         description: |-
           Should always be nil.
-          TODO: Should be removed; also swaggo fails to generate example with null value.
+          XXX: Consider removing the field; also swaggo fails to generate example with null value.
     type: object
   router.CheckHealth.responseBody:
     properties:
@@ -173,6 +201,28 @@ paths:
           schema:
             $ref: '#/definitions/controllers.UserCreate.existedResponseBody'
       summary: Create a user
+      tags:
+      - User
+  /user/get:
+    post:
+      consumes:
+      - application/json
+      description: Get users with the same given username.
+      parameters:
+      - description: ' '
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.GetUsersByUsername.requestBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.GetUsersByUsername.usersNotFoundResponseBody'
+      summary: Get users by username
       tags:
       - User
   /user/login:

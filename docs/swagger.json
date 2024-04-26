@@ -112,6 +112,40 @@
                 }
             }
         },
+        "/user/get": {
+            "post": {
+                "description": "Get users with the same given username.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Get users by username",
+                "parameters": [
+                    {
+                        "description": " ",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controllers.GetUsersByUsername.requestBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.GetUsersByUsername.usersNotFoundResponseBody"
+                        }
+                    }
+                }
+            }
+        },
         "/user/login": {
             "post": {
                 "description": "Login a user with username and password.",
@@ -190,6 +224,45 @@
                 "document_id": {
                     "type": "integer",
                     "example": 10
+                }
+            }
+        },
+        "controllers.GetUsersByUsername.requestBody": {
+            "type": "object",
+            "required": [
+                "username"
+            ],
+            "properties": {
+                "username": {
+                    "type": "string",
+                    "example": "username"
+                }
+            }
+        },
+        "controllers.GetUsersByUsername.successResponseBody": {
+            "type": "object",
+            "properties": {
+                "users": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/controllers.UserDto"
+                    }
+                }
+            }
+        },
+        "controllers.GetUsersByUsername.usersNotFoundResponseBody": {
+            "type": "object",
+            "properties": {
+                "msg": {
+                    "type": "string",
+                    "example": "Users not found"
+                },
+                "users": {
+                    "description": "Should always be empty.\nXXX: Consider removing the field.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/controllers.UserDto"
+                    }
                 }
             }
         },
@@ -286,7 +359,7 @@
                     "example": "User not found"
                 },
                 "user": {
-                    "description": "Should always be nil.\nTODO: Should be removed; also swaggo fails to generate example with null value.",
+                    "description": "Should always be nil.\nXXX: Consider removing the field; also swaggo fails to generate example with null value.",
                     "allOf": [
                         {
                             "$ref": "#/definitions/controllers.UserDto"

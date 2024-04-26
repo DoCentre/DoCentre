@@ -110,19 +110,38 @@ func UserLogin(c *gin.Context) {
 	})
 }
 
+// @Summary Get users by username
+// @Description Get users with the same given username.
+// @Tags User
+// @Accept json
+// @Produce json
+// @Param body body controllers.GetUsersByUsername.requestBody true " "
+// @Success 200 {object} controllers.GetUsersByUsername.successResponseBody
+// @Failure 200 {object} controllers.GetUsersByUsername.usersNotFoundResponseBody
+// @Router /user/get [post]
 func GetUsersByUsername(c *gin.Context) {
-	var body struct {
-		Username string `json:"username" binding:"required"`
+	type requestBody struct {
+		Username string `json:"username" binding:"required" example:"username"`
+	}
+	type usersNotFoundResponseBody struct {
+		// Should always be empty.
+		// XXX: Consider removing the field.
+		Users []UserDto `json:"users"`
+		Msg   string    `json:"msg" example:"Users not found"`
+	}
+	type successResponseBody struct {
+		Users []UserDto `json:"users"`
 	}
 
+	var body requestBody
 	c.Bind(&body)
 
 	users, err := services.GetUsersByUsername(body.Username)
 	if err != nil {
 		log.Default().Println(err)
-		c.JSON(200, gin.H{
-			"users": []UserDto{},
-			"msg":   "Users not found",
+		c.JSON(200, usersNotFoundResponseBody{
+			Users: []UserDto{},
+			Msg:   "Users not found",
 		})
 		return
 	}
@@ -139,7 +158,7 @@ func GetUsersByUsername(c *gin.Context) {
 		usersDto = append(usersDto, userDto)
 	}
 
-	c.JSON(200, gin.H{
-		"users": usersDto,
+	c.JSON(200, successResponseBody{
+		Users: usersDto,
 	})
 }
