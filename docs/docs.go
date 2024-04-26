@@ -122,6 +122,46 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/user/login": {
+            "post": {
+                "description": "Login a user with username and password.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Login a user",
+                "parameters": [
+                    {
+                        "description": " ",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controllers.UserLogin.requestBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.UserLogin.successResponseBody"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.UserLogin.userNotFoundResponseBody"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -221,6 +261,48 @@ const docTemplate = `{
                 "username": {
                     "type": "string",
                     "example": "username"
+                }
+            }
+        },
+        "controllers.UserLogin.requestBody": {
+            "type": "object",
+            "required": [
+                "password",
+                "username"
+            ],
+            "properties": {
+                "password": {
+                    "type": "string",
+                    "example": "password"
+                },
+                "username": {
+                    "type": "string",
+                    "example": "username"
+                }
+            }
+        },
+        "controllers.UserLogin.successResponseBody": {
+            "type": "object",
+            "properties": {
+                "user": {
+                    "$ref": "#/definitions/controllers.UserDto"
+                }
+            }
+        },
+        "controllers.UserLogin.userNotFoundResponseBody": {
+            "type": "object",
+            "properties": {
+                "msg": {
+                    "type": "string",
+                    "example": "User not found"
+                },
+                "user": {
+                    "description": "Should always be nil.\nTODO: Should be removed; also swaggo fails to generate example with null value.",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/controllers.UserDto"
+                        }
+                    ]
                 }
             }
         },

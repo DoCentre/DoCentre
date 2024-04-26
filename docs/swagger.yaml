@@ -67,6 +67,35 @@ definitions:
         example: username
         type: string
     type: object
+  controllers.UserLogin.requestBody:
+    properties:
+      password:
+        example: password
+        type: string
+      username:
+        example: username
+        type: string
+    required:
+    - password
+    - username
+    type: object
+  controllers.UserLogin.successResponseBody:
+    properties:
+      user:
+        $ref: '#/definitions/controllers.UserDto'
+    type: object
+  controllers.UserLogin.userNotFoundResponseBody:
+    properties:
+      msg:
+        example: User not found
+        type: string
+      user:
+        allOf:
+        - $ref: '#/definitions/controllers.UserDto'
+        description: |-
+          Should always be nil.
+          TODO: Should be removed; also swaggo fails to generate example with null value.
+    type: object
   router.CheckHealth.responseBody:
     properties:
       message:
@@ -144,6 +173,32 @@ paths:
           schema:
             $ref: '#/definitions/controllers.UserCreate.existedResponseBody'
       summary: Create a user
+      tags:
+      - User
+  /user/login:
+    post:
+      consumes:
+      - application/json
+      description: Login a user with username and password.
+      parameters:
+      - description: ' '
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.UserLogin.requestBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.UserLogin.successResponseBody'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/controllers.UserLogin.userNotFoundResponseBody'
+      summary: Login a user
       tags:
       - User
 swagger: "2.0"

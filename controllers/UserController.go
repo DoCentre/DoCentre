@@ -61,20 +61,39 @@ func UserCreate(c *gin.Context) {
 	})
 }
 
+// @Summary Login a user
+// @Description Login a user with username and password.
+// @Tags User
+// @Accept json
+// @Produce json
+// @Param body body controllers.UserLogin.requestBody true " "
+// @Success 200 {object} controllers.UserLogin.successResponseBody
+// @Failure 404 {object} controllers.UserLogin.userNotFoundResponseBody
+// @Router /user/login [post]
 func UserLogin(c *gin.Context) {
-	var body struct {
-		Username string `json:"username" binding:"required"`
-		Password string `json:"password" binding:"required"`
+	type requestBody struct {
+		Username string `json:"username" binding:"required" example:"username"`
+		Password string `json:"password" binding:"required" example:"password"`
+	}
+	type userNotFoundResponseBody struct {
+		// Should always be nil.
+		// XXX: Consider removing the field; also swaggo fails to generate example with null value.
+		User *UserDto `json:"user"`
+		Msg  string   `json:"msg" example:"User not found"`
+	}
+	type successResponseBody struct {
+		User UserDto `json:"user"`
 	}
 
+	var body requestBody
 	c.Bind(&body)
 
 	user, err := services.UserLogin(body.Username, body.Password)
 	if err != nil {
 		log.Default().Println(err)
-		c.JSON(404, gin.H{
-			"user": nil,
-			"msg":  "User not found",
+		c.JSON(404, userNotFoundResponseBody{
+			User: nil,
+			Msg:  "User not found",
 		})
 		return
 	}
@@ -86,8 +105,8 @@ func UserLogin(c *gin.Context) {
 		Identity: user.Identity,
 	}
 
-	c.JSON(200, gin.H{
-		"user": userDto,
+	c.JSON(200, successResponseBody{
+		User: userDto,
 	})
 }
 
