@@ -35,7 +35,7 @@ func CreateDocument(c *gin.Context) {
 	var body requestBody
 	err := c.BindJSON(&body)
 	if err != nil {
-		log.Default().Println(err)
+		log.Println(err)
 		c.JSON(http.StatusBadRequest, invalidResponseBody{
 			Error: "Invalid request body",
 		})

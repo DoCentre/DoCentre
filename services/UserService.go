@@ -35,7 +35,7 @@ func GetUsersByUsername(name string) ([]models.User, error) {
 	// perform like query
 	result := initializers.DB.Where("username LIKE ?", "%"+name+"%").Find(&users)
 
-	log.Default().Println(users)
+	log.Println(users)
 	if result.Error != nil {
 		return []models.User{}, result.Error
 	}

@@ -46,7 +46,7 @@ func UserCreate(c *gin.Context) {
 	var body requestBody
 	err := c.Bind(&body)
 	if err != nil {
-		log.Default().Println(err)
+		log.Println(err)
 		c.JSON(http.StatusBadRequest, invalidResponseBody{
 			Msg: "Invalid request body",
 		})
@@ -55,7 +55,7 @@ func UserCreate(c *gin.Context) {
 
 	user, err := services.UserCreate(body.Username, body.Email, body.Password)
 	if err != nil {
-		log.Default().Println(err)
+		log.Println(err)
 		c.JSON(http.StatusBadRequest, existedResponseBody{
 			Msg: "User/Email already exists",
 		})
@@ -101,7 +101,7 @@ func UserLogin(c *gin.Context) {
 	var body requestBody
 	err := c.Bind(&body)
 	if err != nil {
-		log.Default().Println(err)
+		log.Println(err)
 		c.JSON(http.StatusBadRequest, invalidResponseBody{
 			Msg: "Invalid request body",
 		})
@@ -110,7 +110,7 @@ func UserLogin(c *gin.Context) {
 
 	user, err := services.UserLogin(body.Username, body.Password)
 	if err != nil {
-		log.Default().Println(err)
+		log.Println(err)
 		c.JSON(http.StatusNotFound, userNotFoundResponseBody{
 			User: nil,
 			Msg:  "User not found",
@@ -156,7 +156,7 @@ func GetUsersByUsername(c *gin.Context) {
 	var body requestBody
 	err := c.Bind(&body)
 	if err != nil {
-		log.Default().Println(err)
+		log.Println(err)
 		c.JSON(http.StatusBadRequest, invalidResponseBody{
 			Msg: "Invalid request body",
 		})
@@ -165,7 +165,7 @@ func GetUsersByUsername(c *gin.Context) {
 
 	users, err := services.GetUsersByUsername(body.Username)
 	if err != nil {
-		log.Default().Println(err)
+		log.Println(err)
 		c.JSON(http.StatusOK, usersNotFoundResponseBody{
 			Users: []UserDto{},
 			Msg:   "Users not found",
