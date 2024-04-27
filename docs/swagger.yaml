@@ -1,5 +1,130 @@
 definitions:
-  main.healthResponse:
+  controllers.CreateDocument.failedResponseBody:
+    properties:
+      error:
+        example: Failed to create document
+        type: string
+    type: object
+  controllers.CreateDocument.invalidResponseBody:
+    properties:
+      error:
+        example: Invalid request body
+        type: string
+    type: object
+  controllers.CreateDocument.requestBody:
+    properties:
+      author_id:
+        example: 1
+        type: integer
+    required:
+    - author_id
+    type: object
+  controllers.CreateDocument.successResponseBody:
+    properties:
+      document_id:
+        example: 10
+        type: integer
+    type: object
+  controllers.GetUsersByUsername.requestBody:
+    properties:
+      username:
+        example: username
+        type: string
+    required:
+    - username
+    type: object
+  controllers.GetUsersByUsername.successResponseBody:
+    properties:
+      users:
+        items:
+          $ref: '#/definitions/controllers.UserDto'
+        type: array
+    type: object
+  controllers.GetUsersByUsername.usersNotFoundResponseBody:
+    properties:
+      msg:
+        example: Users not found
+        type: string
+      users:
+        description: |-
+          Should always be empty.
+          XXX: Consider removing the field.
+        items:
+          $ref: '#/definitions/controllers.UserDto'
+        type: array
+    type: object
+  controllers.UserCreate.existedResponseBody:
+    properties:
+      msg:
+        example: User/Email already exists
+        type: string
+    type: object
+  controllers.UserCreate.requestBody:
+    properties:
+      email:
+        example: email@mail.com
+        type: string
+      password:
+        example: password
+        type: string
+      username:
+        example: username
+        type: string
+    required:
+    - email
+    - password
+    - username
+    type: object
+  controllers.UserCreate.successResponseBody:
+    properties:
+      user:
+        $ref: '#/definitions/controllers.UserDto'
+    type: object
+  controllers.UserDto:
+    properties:
+      email:
+        example: email@mail.com
+        type: string
+      id:
+        example: 1
+        type: integer
+      identity:
+        example: user
+        type: string
+      username:
+        example: username
+        type: string
+    type: object
+  controllers.UserLogin.requestBody:
+    properties:
+      password:
+        example: password
+        type: string
+      username:
+        example: username
+        type: string
+    required:
+    - password
+    - username
+    type: object
+  controllers.UserLogin.successResponseBody:
+    properties:
+      user:
+        $ref: '#/definitions/controllers.UserDto'
+    type: object
+  controllers.UserLogin.userNotFoundResponseBody:
+    properties:
+      msg:
+        example: User not found
+        type: string
+      user:
+        allOf:
+        - $ref: '#/definitions/controllers.UserDto'
+        description: |-
+          Should always be nil.
+          XXX: Consider removing the field; also swaggo fails to generate example with null value.
+    type: object
+  router.CheckHealth.responseBody:
     properties:
       message:
         type: string
@@ -7,6 +132,37 @@ definitions:
 info:
   contact: {}
 paths:
+  /document:
+    post:
+      consumes:
+      - application/json
+      description: Create a new document that belongs to the author; the author has
+        to be a existing user.
+      parameters:
+      - description: ' '
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.CreateDocument.requestBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.CreateDocument.successResponseBody'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.CreateDocument.invalidResponseBody'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/controllers.CreateDocument.failedResponseBody'
+      summary: Create document
+      tags:
+      - Document
   /health:
     get:
       consumes:
@@ -17,8 +173,82 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/main.healthResponse'
+            $ref: '#/definitions/router.CheckHealth.responseBody'
       summary: Check health
       tags:
-      - health
+      - Health
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: Login a user with username and password.
+      parameters:
+      - description: ' '
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.UserLogin.requestBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.UserLogin.successResponseBody'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/controllers.UserLogin.userNotFoundResponseBody'
+      summary: Login a user
+      tags:
+      - User
+  /user:
+    post:
+      consumes:
+      - application/json
+      description: Create a new user; the user will be created with the identity "user".
+      parameters:
+      - description: ' '
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.UserCreate.requestBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.UserCreate.successResponseBody'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.UserCreate.existedResponseBody'
+      summary: Create a user
+      tags:
+      - User
+  /users:
+    post:
+      consumes:
+      - application/json
+      description: Get users with the same given username.
+      parameters:
+      - description: ' '
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.GetUsersByUsername.requestBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.GetUsersByUsername.usersNotFoundResponseBody'
+      summary: Get users by username
+      tags:
+      - User
 swagger: "2.0"
