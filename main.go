@@ -1,7 +1,6 @@
 package main
 
 import (
-	"github.com/docentre/docentre/migrate"
 	"github.com/docentre/docentre/router"
 
 	"github.com/docentre/docentre/repositories"
@@ -10,7 +9,7 @@ import (
 func init() {
 	repositories.LoadEnvVariables()
 	repositories.ConnectToDB()
-	migrate.CreateDatabase()
+	repositories.CreateDatabase()
 }
 
 func main() {
