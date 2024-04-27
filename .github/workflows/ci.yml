@@ -20,8 +20,6 @@ jobs:
         with:
           go-version-file: "go.mod"
           check-latest: true
-      - name: Install linter
-        run: make tools
       - name: Run linter
         run: make vet && make lint
 
@@ -69,4 +67,4 @@ jobs:
 
       - name: Format
         if: matrix.go-version == '1.22.x'
-        run: make tools && make fmt-check
+        run: make fmt-check
