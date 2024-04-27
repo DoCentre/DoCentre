@@ -2,19 +2,17 @@ package repositories
 
 import (
 	"log"
-	"os"
 
 	"github.com/docentre/docentre/models"
-	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
 
 var DB *gorm.DB
 
-func ConnectToDB() {
+// ConnectToDB connects to the database and stores the connection in the DB package variable.
+func ConnectToDB(dialector gorm.Dialector, config *gorm.Config) {
 	var err error
-	dsn := os.Getenv("DB_URL")
-	DB, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	DB, err = gorm.Open(dialector, config)
 	if err != nil {
 		log.Fatal("failed to connect database")
 	}
