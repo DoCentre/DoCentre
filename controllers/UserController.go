@@ -22,7 +22,7 @@ type UserDto struct {
 // @Param body body controllers.UserCreate.requestBody true " "
 // @Success 200 {object} controllers.UserCreate.successResponseBody
 // @Failure 400 {object} controllers.UserCreate.existedResponseBody
-// @Router /user/create [post]
+// @Router /user [post]
 func UserCreate(c *gin.Context) {
 	type requestBody struct {
 		Username string `json:"username" binding:"required" example:"username"`
@@ -69,7 +69,7 @@ func UserCreate(c *gin.Context) {
 // @Param body body controllers.UserLogin.requestBody true " "
 // @Success 200 {object} controllers.UserLogin.successResponseBody
 // @Failure 404 {object} controllers.UserLogin.userNotFoundResponseBody
-// @Router /user/login [post]
+// @Router /login [post]
 func UserLogin(c *gin.Context) {
 	type requestBody struct {
 		Username string `json:"username" binding:"required" example:"username"`
@@ -118,7 +118,7 @@ func UserLogin(c *gin.Context) {
 // @Param body body controllers.GetUsersByUsername.requestBody true " "
 // @Success 200 {object} controllers.GetUsersByUsername.successResponseBody
 // @Failure 200 {object} controllers.GetUsersByUsername.usersNotFoundResponseBody
-// @Router /user/get [post]
+// @Router /users [post]
 func GetUsersByUsername(c *gin.Context) {
 	type requestBody struct {
 		Username string `json:"username" binding:"required" example:"username"`

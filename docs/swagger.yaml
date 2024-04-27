@@ -177,7 +177,33 @@ paths:
       summary: Check health
       tags:
       - Health
-  /user/create:
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: Login a user with username and password.
+      parameters:
+      - description: ' '
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.UserLogin.requestBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.UserLogin.successResponseBody'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/controllers.UserLogin.userNotFoundResponseBody'
+      summary: Login a user
+      tags:
+      - User
+  /user:
     post:
       consumes:
       - application/json
@@ -203,7 +229,7 @@ paths:
       summary: Create a user
       tags:
       - User
-  /user/get:
+  /users:
     post:
       consumes:
       - application/json
@@ -223,32 +249,6 @@ paths:
           schema:
             $ref: '#/definitions/controllers.GetUsersByUsername.usersNotFoundResponseBody'
       summary: Get users by username
-      tags:
-      - User
-  /user/login:
-    post:
-      consumes:
-      - application/json
-      description: Login a user with username and password.
-      parameters:
-      - description: ' '
-        in: body
-        name: body
-        required: true
-        schema:
-          $ref: '#/definitions/controllers.UserLogin.requestBody'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/controllers.UserLogin.successResponseBody'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/controllers.UserLogin.userNotFoundResponseBody'
-      summary: Login a user
       tags:
       - User
 swagger: "2.0"

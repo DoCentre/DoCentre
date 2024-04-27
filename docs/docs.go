@@ -83,7 +83,47 @@ const docTemplate = `{
                 }
             }
         },
-        "/user/create": {
+        "/login": {
+            "post": {
+                "description": "Login a user with username and password.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Login a user",
+                "parameters": [
+                    {
+                        "description": " ",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controllers.UserLogin.requestBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.UserLogin.successResponseBody"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.UserLogin.userNotFoundResponseBody"
+                        }
+                    }
+                }
+            }
+        },
+        "/user": {
             "post": {
                 "description": "Create a new user; the user will be created with the identity \"user\".",
                 "consumes": [
@@ -123,7 +163,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/user/get": {
+        "/users": {
             "post": {
                 "description": "Get users with the same given username.",
                 "consumes": [
@@ -152,46 +192,6 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/controllers.GetUsersByUsername.usersNotFoundResponseBody"
-                        }
-                    }
-                }
-            }
-        },
-        "/user/login": {
-            "post": {
-                "description": "Login a user with username and password.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "User"
-                ],
-                "summary": "Login a user",
-                "parameters": [
-                    {
-                        "description": " ",
-                        "name": "body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/controllers.UserLogin.requestBody"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/controllers.UserLogin.successResponseBody"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/controllers.UserLogin.userNotFoundResponseBody"
                         }
                     }
                 }
