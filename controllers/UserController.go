@@ -68,7 +68,6 @@ func UserCreate(c *gin.Context) {
 		Email:    user.Email,
 		Identity: user.Identity,
 	}
-
 	c.JSON(http.StatusOK, successResponseBody{
 		User: userDto,
 	})
@@ -125,7 +124,6 @@ func UserLogin(c *gin.Context) {
 		Email:    user.Email,
 		Identity: user.Identity,
 	}
-
 	c.JSON(http.StatusOK, successResponseBody{
 		User: userDto,
 	})
@@ -176,7 +174,6 @@ func GetUsersByUsername(c *gin.Context) {
 	}
 
 	var usersDto []UserDto
-
 	for _, user := range users {
 		userDto := UserDto{
 			ID:       user.ID,
@@ -186,7 +183,6 @@ func GetUsersByUsername(c *gin.Context) {
 		}
 		usersDto = append(usersDto, userDto)
 	}
-
 	c.JSON(http.StatusOK, successResponseBody{
 		Users: usersDto,
 	})
