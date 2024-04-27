@@ -4,12 +4,12 @@ import (
 	"github.com/docentre/docentre/migrate"
 	"github.com/docentre/docentre/router"
 
-	"github.com/docentre/docentre/initializers"
+	"github.com/docentre/docentre/repositories"
 )
 
 func init() {
-	initializers.LoadEnvVariables()
-	initializers.ConnectToDB()
+	repositories.LoadEnvVariables()
+	repositories.ConnectToDB()
 	migrate.CreateDatabase()
 }
 
