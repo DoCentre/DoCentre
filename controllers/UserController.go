@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"log"
+	"net/http"
 
 	"github.com/docentre/docentre/services"
 	"github.com/gin-gonic/gin"
@@ -42,8 +43,7 @@ func UserCreate(c *gin.Context) {
 	user, err := services.UserCreate(body.Username, body.Email, body.Password)
 	if err != nil {
 		log.Default().Println(err)
-		c.Status(400)
-		c.JSON(400, existedResponseBody{
+		c.JSON(http.StatusBadRequest, existedResponseBody{
 			Msg: "User/Email already exists",
 		})
 		return
@@ -56,7 +56,7 @@ func UserCreate(c *gin.Context) {
 		Identity: user.Identity,
 	}
 
-	c.JSON(200, successResponseBody{
+	c.JSON(http.StatusOK, successResponseBody{
 		User: userDto,
 	})
 }
@@ -91,7 +91,7 @@ func UserLogin(c *gin.Context) {
 	user, err := services.UserLogin(body.Username, body.Password)
 	if err != nil {
 		log.Default().Println(err)
-		c.JSON(404, userNotFoundResponseBody{
+		c.JSON(http.StatusNotFound, userNotFoundResponseBody{
 			User: nil,
 			Msg:  "User not found",
 		})
@@ -105,7 +105,7 @@ func UserLogin(c *gin.Context) {
 		Identity: user.Identity,
 	}
 
-	c.JSON(200, successResponseBody{
+	c.JSON(http.StatusOK, successResponseBody{
 		User: userDto,
 	})
 }
@@ -139,7 +139,7 @@ func GetUsersByUsername(c *gin.Context) {
 	users, err := services.GetUsersByUsername(body.Username)
 	if err != nil {
 		log.Default().Println(err)
-		c.JSON(200, usersNotFoundResponseBody{
+		c.JSON(http.StatusOK, usersNotFoundResponseBody{
 			Users: []UserDto{},
 			Msg:   "Users not found",
 		})
@@ -158,7 +158,7 @@ func GetUsersByUsername(c *gin.Context) {
 		usersDto = append(usersDto, userDto)
 	}
 
-	c.JSON(200, successResponseBody{
+	c.JSON(http.StatusOK, successResponseBody{
 		Users: usersDto,
 	})
 }
