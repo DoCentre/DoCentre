@@ -20,8 +20,10 @@ func ConnectToDB() {
 	}
 }
 
-// CreateDatabase creates the tables used in this application.
-func CreateDatabase() {
+// MigrateDB creates tables, missing foreign keys, constraints, columns and indexes.
+// It will change existing column's type if its size, precision, nullable changed.
+// It WON’T delete unused columns to protect your data.
+func MigrateDB() {
 	DB.AutoMigrate(&models.User{})
 	DB.AutoMigrate(&models.Document{})
 }

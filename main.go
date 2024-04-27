@@ -9,7 +9,7 @@ import (
 func init() {
 	repositories.LoadEnvVariables()
 	repositories.ConnectToDB()
-	repositories.CreateDatabase()
+	repositories.MigrateDB()
 }
 
 func main() {
