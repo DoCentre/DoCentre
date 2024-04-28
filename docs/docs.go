@@ -114,6 +114,12 @@ const docTemplate = `{
                             "$ref": "#/definitions/controllers.UserLogin.successResponseBody"
                         }
                     },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.invalidResponseBody"
+                        }
+                    },
                     "404": {
                         "description": "Not Found",
                         "schema": {
@@ -192,6 +198,12 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/controllers.GetUsersByUsername.usersNotFoundResponseBody"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.invalidResponseBody"
                         }
                     }
                 }
@@ -376,6 +388,15 @@ const docTemplate = `{
                             "$ref": "#/definitions/controllers.UserDto"
                         }
                     ]
+                }
+            }
+        },
+        "controllers.invalidResponseBody": {
+            "type": "object",
+            "properties": {
+                "msg": {
+                    "type": "string",
+                    "example": "Invalid request body"
                 }
             }
         },

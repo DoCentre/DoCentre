@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"log"
+	"net/http"
 
 	"github.com/docentre/docentre/services"
 	"github.com/gin-gonic/gin"
@@ -14,6 +15,11 @@ type UserDto struct {
 	Identity string `json:"identity" example:"user"`
 }
 
+// invalidResponseBody is the response body for request with invalid request body.
+type invalidResponseBody struct {
+	Msg string `json:"msg" example:"Invalid request body"`
+}
+
 // @Summary Create a user
 // @Description Create a new user; the user will be created with the identity "user".
 // @Tags User
@@ -21,6 +27,7 @@ type UserDto struct {
 // @Produce json
 // @Param body body controllers.UserCreate.requestBody true " "
 // @Success 200 {object} controllers.UserCreate.successResponseBody
+// @Failure 400 {object} invalidResponseBody
 // @Failure 400 {object} controllers.UserCreate.existedResponseBody
 // @Router /user [post]
 func UserCreate(c *gin.Context) {
@@ -37,13 +44,19 @@ func UserCreate(c *gin.Context) {
 	}
 
 	var body requestBody
-	c.Bind(&body)
+	err := c.Bind(&body)
+	if err != nil {
+		log.Println(err)
+		c.JSON(http.StatusBadRequest, invalidResponseBody{
+			Msg: "Invalid request body",
+		})
+		return
+	}
 
 	user, err := services.UserCreate(body.Username, body.Email, body.Password)
 	if err != nil {
-		log.Default().Println(err)
-		c.Status(400)
-		c.JSON(400, existedResponseBody{
+		log.Println(err)
+		c.JSON(http.StatusBadRequest, existedResponseBody{
 			Msg: "User/Email already exists",
 		})
 		return
@@ -55,8 +68,7 @@ func UserCreate(c *gin.Context) {
 		Email:    user.Email,
 		Identity: user.Identity,
 	}
-
-	c.JSON(200, successResponseBody{
+	c.JSON(http.StatusOK, successResponseBody{
 		User: userDto,
 	})
 }
@@ -68,6 +80,7 @@ func UserCreate(c *gin.Context) {
 // @Produce json
 // @Param body body controllers.UserLogin.requestBody true " "
 // @Success 200 {object} controllers.UserLogin.successResponseBody
+// @Failure 400 {object} invalidResponseBody
 // @Failure 404 {object} controllers.UserLogin.userNotFoundResponseBody
 // @Router /login [post]
 func UserLogin(c *gin.Context) {
@@ -86,12 +99,19 @@ func UserLogin(c *gin.Context) {
 	}
 
 	var body requestBody
-	c.Bind(&body)
+	err := c.Bind(&body)
+	if err != nil {
+		log.Println(err)
+		c.JSON(http.StatusBadRequest, invalidResponseBody{
+			Msg: "Invalid request body",
+		})
+		return
+	}
 
 	user, err := services.UserLogin(body.Username, body.Password)
 	if err != nil {
-		log.Default().Println(err)
-		c.JSON(404, userNotFoundResponseBody{
+		log.Println(err)
+		c.JSON(http.StatusNotFound, userNotFoundResponseBody{
 			User: nil,
 			Msg:  "User not found",
 		})
@@ -104,8 +124,7 @@ func UserLogin(c *gin.Context) {
 		Email:    user.Email,
 		Identity: user.Identity,
 	}
-
-	c.JSON(200, successResponseBody{
+	c.JSON(http.StatusOK, successResponseBody{
 		User: userDto,
 	})
 }
@@ -117,6 +136,7 @@ func UserLogin(c *gin.Context) {
 // @Produce json
 // @Param body body controllers.GetUsersByUsername.requestBody true " "
 // @Success 200 {object} controllers.GetUsersByUsername.successResponseBody
+// @Failure 400 {object} invalidResponseBody
 // @Failure 200 {object} controllers.GetUsersByUsername.usersNotFoundResponseBody
 // @Router /users [post]
 func GetUsersByUsername(c *gin.Context) {
@@ -134,12 +154,19 @@ func GetUsersByUsername(c *gin.Context) {
 	}
 
 	var body requestBody
-	c.Bind(&body)
+	err := c.Bind(&body)
+	if err != nil {
+		log.Println(err)
+		c.JSON(http.StatusBadRequest, invalidResponseBody{
+			Msg: "Invalid request body",
+		})
+		return
+	}
 
 	users, err := services.GetUsersByUsername(body.Username)
 	if err != nil {
-		log.Default().Println(err)
-		c.JSON(200, usersNotFoundResponseBody{
+		log.Println(err)
+		c.JSON(http.StatusOK, usersNotFoundResponseBody{
 			Users: []UserDto{},
 			Msg:   "Users not found",
 		})
@@ -147,7 +174,6 @@ func GetUsersByUsername(c *gin.Context) {
 	}
 
 	var usersDto []UserDto
-
 	for _, user := range users {
 		userDto := UserDto{
 			ID:       user.ID,
@@ -157,8 +183,7 @@ func GetUsersByUsername(c *gin.Context) {
 		}
 		usersDto = append(usersDto, userDto)
 	}
-
-	c.JSON(200, successResponseBody{
+	c.JSON(http.StatusOK, successResponseBody{
 		Users: usersDto,
 	})
 }

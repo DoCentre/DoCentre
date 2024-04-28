@@ -21,7 +21,6 @@
 
 - [About](#about)
 - [Getting Started](#getting_started)
-- [Dev Setup](#dev-setup)
 - [API Endpoints](#api)
 - [Running the Tests](#tests)
 - [Development](#development)

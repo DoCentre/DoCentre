@@ -124,6 +124,12 @@ definitions:
           Should always be nil.
           XXX: Consider removing the field; also swaggo fails to generate example with null value.
     type: object
+  controllers.invalidResponseBody:
+    properties:
+      msg:
+        example: Invalid request body
+        type: string
+    type: object
   router.CheckHealth.responseBody:
     properties:
       message:
@@ -196,6 +202,10 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/controllers.UserLogin.successResponseBody'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.invalidResponseBody'
         "404":
           description: Not Found
           schema:
@@ -248,6 +258,10 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/controllers.GetUsersByUsername.usersNotFoundResponseBody'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.invalidResponseBody'
       summary: Get users by username
       tags:
       - User
