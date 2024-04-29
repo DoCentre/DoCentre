@@ -14,14 +14,18 @@ type User struct {
 type Document struct {
 	ID           uint `gorm:"primaryKey"`
 	AuthorID     uint
-	Title        string `gorm:"default:'Untitled'"`
-	Content      []byte
-	Appendix     []byte
+	Title        string
+	Content      string
+	Appendix     string
 	Status       string `gorm:"not null;default:'EDIT'"` // EDIT, VERIFY, REJECT, APPROVE
 	RejectReason string
-	LastEditDate time.Time
-	// ApprovedDate time.Time
+	CreatedAt    time.Time // 建立時間（由GORM自動管理）
+	UpdatedAt    time.Time // 最後一次更新時間（由GORM自動管理）
+	ApprovedDate time.Time
 	// foreign keys to User
-	// ApproverID User `gorm:"foreignKey:User.ID"`
-	// ViewerID   User `gorm:"foreignKey:User.ID"`
+	ApproverID uint `gorm:"foreignKey:ApproverID"`
+	ViewerID   uint `gorm:"foreignKey:ViewerID"`
+	Author     User `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+	Approver   User `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+	Viewer     User `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 }

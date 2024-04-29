@@ -45,7 +45,7 @@ func setUserController(r *gin.Engine) {
 
 func setDocumentController(r *gin.Engine) {
 	r.POST("/document", controllers.CreateDocument)
-	// TODO r.PATCH("/documents/:document_id", controllers.UpdateDocument)
+	r.PUT("/document/update", controllers.UpdateDocument)
 	// TODO r.PATCH("/documents/:document_id/status", controllers.SetDocumentStatus)
 }
 

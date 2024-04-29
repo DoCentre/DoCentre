@@ -22,7 +22,7 @@ definitions:
   controllers.CreateDocument.successResponseBody:
     properties:
       document_id:
-        example: 10
+        example: 1
         type: integer
     type: object
   controllers.GetUsersByUsername.requestBody:
@@ -52,6 +52,52 @@ definitions:
         items:
           $ref: '#/definitions/controllers.UserDto'
         type: array
+    type: object
+  controllers.UpdateDocument.failedResponseBody:
+    properties:
+      error:
+        example: Failed to update document
+        type: string
+    type: object
+  controllers.UpdateDocument.invalidResponseBody:
+    properties:
+      error:
+        example: Invalid request body
+        type: string
+    type: object
+  controllers.UpdateDocument.requestBody:
+    properties:
+      appendix:
+        example: ""
+        type: string
+      approver_id:
+        example: 0
+        type: integer
+      author_id:
+        example: 1
+        type: integer
+      content:
+        example: Hello, world!
+        type: string
+      document_id:
+        example: 1
+        type: integer
+      status:
+        example: EDIT
+        type: string
+      title:
+        example: Hello
+        type: string
+    required:
+    - author_id
+    - content
+    - document_id
+    type: object
+  controllers.UpdateDocument.successResponseBody:
+    properties:
+      document_id:
+        example: 1
+        type: integer
     type: object
   controllers.UserCreate.existedResponseBody:
     properties:
@@ -167,6 +213,37 @@ paths:
           schema:
             $ref: '#/definitions/controllers.CreateDocument.failedResponseBody'
       summary: Create document
+      tags:
+      - Document
+  /document/update:
+    put:
+      consumes:
+      - application/json
+      description: Update a document that belongs to the author; the author has to
+        be a existing user. if no approver yet, approver_id should be 0.
+      parameters:
+      - description: ' '
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.UpdateDocument.requestBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.UpdateDocument.successResponseBody'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.UpdateDocument.invalidResponseBody'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/controllers.UpdateDocument.failedResponseBody'
+      summary: Update document
       tags:
       - Document
   /health:
