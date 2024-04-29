@@ -73,9 +73,9 @@ func UpdateDocument(c *gin.Context) {
 		AuthorID   uint `json:"author_id" binding:"required" example:"1"`
 		Title	  string `json:"title" example:"Hello"`
 		Content    string `json:"content" binding:"required" example:"Hello, world!"`
-		Appendix   []byte `json:"appendix" example:""`
+		Appendix   string `json:"appendix" example:""`
 		Status    string `json:"status" example:"EDIT"`
-		ApproverID uint `json:"approver_id" example:"0 (0 means no approver)"`
+		ApproverID uint `json:"approver_id" example:"0"`
 	}
 	type invalidResponseBody struct {
 		Error string `json:"error" example:"Invalid request body"`

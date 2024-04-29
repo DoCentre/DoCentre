@@ -292,7 +292,7 @@ const docTemplate = `{
             "properties": {
                 "document_id": {
                     "type": "integer",
-                    "example": 10
+                    "example": 1
                 }
             }
         },
@@ -354,14 +354,49 @@ const docTemplate = `{
             }
         },
         "controllers.UpdateDocument.requestBody": {
-            "type": "object"
+            "type": "object",
+            "required": [
+                "author_id",
+                "content",
+                "document_id"
+            ],
+            "properties": {
+                "appendix": {
+                    "type": "string",
+                    "example": ""
+                },
+                "approver_id": {
+                    "type": "integer",
+                    "example": 0
+                },
+                "author_id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "content": {
+                    "type": "string",
+                    "example": "Hello, world!"
+                },
+                "document_id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "status": {
+                    "type": "string",
+                    "example": "EDIT"
+                },
+                "title": {
+                    "type": "string",
+                    "example": "Hello"
+                }
+            }
         },
         "controllers.UpdateDocument.successResponseBody": {
             "type": "object",
             "properties": {
                 "document_id": {
                     "type": "integer",
-                    "example": 10
+                    "example": 1
                 }
             }
         },

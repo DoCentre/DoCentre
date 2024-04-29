@@ -15,7 +15,7 @@ func CreateDocument(authorID uint) (models.Document, error) {
 	return doc, nil
 }
 
-func UpdateDocument(documentID uint, authorID uint, title string, content string, appendix []byte, status string, approverID uint) (uint, error) {
+func UpdateDocument(documentID uint, authorID uint, title string, content string, appendix string, status string, approverID uint) (uint, error) {
 
 	if approverID == 0 {
 		result := repositories.DB.Model(&models.Document{}).Where("id = ?", documentID).Updates(map[string]interface{}{"author_id": authorID, "title": title, "content": content, "appendix": appendix, "status": status})

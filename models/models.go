@@ -16,7 +16,7 @@ type Document struct {
 	AuthorID     uint
 	Title        string
 	Content      string
-	Appendix     []byte
+	Appendix     string
 	Status       string `gorm:"not null;default:'EDIT'"` // EDIT, VERIFY, REJECT, APPROVE
 	RejectReason string
 	CreatedAt    time.Time  // 建立時間（由GORM自動管理）

@@ -22,7 +22,7 @@ definitions:
   controllers.CreateDocument.successResponseBody:
     properties:
       document_id:
-        example: 10
+        example: 1
         type: integer
     type: object
   controllers.GetUsersByUsername.requestBody:
@@ -66,11 +66,37 @@ definitions:
         type: string
     type: object
   controllers.UpdateDocument.requestBody:
+    properties:
+      appendix:
+        example: ""
+        type: string
+      approver_id:
+        example: 0
+        type: integer
+      author_id:
+        example: 1
+        type: integer
+      content:
+        example: Hello, world!
+        type: string
+      document_id:
+        example: 1
+        type: integer
+      status:
+        example: EDIT
+        type: string
+      title:
+        example: Hello
+        type: string
+    required:
+    - author_id
+    - content
+    - document_id
     type: object
   controllers.UpdateDocument.successResponseBody:
     properties:
       document_id:
-        example: 10
+        example: 1
         type: integer
     type: object
   controllers.UserCreate.existedResponseBody:
