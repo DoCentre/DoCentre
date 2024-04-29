@@ -19,8 +19,8 @@ type Document struct {
 	Appendix     string
 	Status       string `gorm:"not null;default:'EDIT'"` // EDIT, VERIFY, REJECT, APPROVE
 	RejectReason string
-	CreatedAt    time.Time  // 建立時間（由GORM自動管理）
-	UpdatedAt    time.Time  // 最後一次更新時間（由GORM自動管理）
+	CreatedAt    time.Time // 建立時間（由GORM自動管理）
+	UpdatedAt    time.Time // 最後一次更新時間（由GORM自動管理）
 	ApprovedDate time.Time
 	// foreign keys to User
 	ApproverID uint `gorm:"foreignKey:ApproverID"`
