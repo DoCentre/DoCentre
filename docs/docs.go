@@ -61,6 +61,52 @@ const docTemplate = `{
                 }
             }
         },
+        "/document/update": {
+            "put": {
+                "description": "Update a document that belongs to the author; the author has to be a existing user. if no approver yet, approver_id should be 0.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Document"
+                ],
+                "summary": "Update document",
+                "parameters": [
+                    {
+                        "description": " ",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controllers.UpdateDocument.requestBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.UpdateDocument.successResponseBody"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.UpdateDocument.invalidResponseBody"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.UpdateDocument.failedResponseBody"
+                        }
+                    }
+                }
+            }
+        },
         "/health": {
             "get": {
                 "consumes": [
@@ -286,6 +332,36 @@ const docTemplate = `{
                     "items": {
                         "$ref": "#/definitions/controllers.UserDto"
                     }
+                }
+            }
+        },
+        "controllers.UpdateDocument.failedResponseBody": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string",
+                    "example": "Failed to update document"
+                }
+            }
+        },
+        "controllers.UpdateDocument.invalidResponseBody": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string",
+                    "example": "Invalid request body"
+                }
+            }
+        },
+        "controllers.UpdateDocument.requestBody": {
+            "type": "object"
+        },
+        "controllers.UpdateDocument.successResponseBody": {
+            "type": "object",
+            "properties": {
+                "document_id": {
+                    "type": "integer",
+                    "example": 10
                 }
             }
         },
