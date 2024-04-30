@@ -61,6 +61,52 @@ const docTemplate = `{
                 }
             }
         },
+        "/document/add/viewer": {
+            "post": {
+                "description": "Add a viewer to the document; the viewer has to be a existing user.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Document"
+                ],
+                "summary": "Add viewer",
+                "parameters": [
+                    {
+                        "description": " ",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controllers.AddViewer.requestBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.AddViewer.successResponseBody"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.AddViewer.invalidResponseBody"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.AddViewer.failedResponseBody"
+                        }
+                    }
+                }
+            }
+        },
         "/document/update": {
             "put": {
                 "description": "Update a document that belongs to the author; the author has to be a existing user. if no approver yet, approver_id should be 0.",
@@ -102,6 +148,98 @@ const docTemplate = `{
                         "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/controllers.UpdateDocument.failedResponseBody"
+                        }
+                    }
+                }
+            }
+        },
+        "/documents/author": {
+            "post": {
+                "description": "Get all documents that belong to the author; the author has to be a existing user.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Document"
+                ],
+                "summary": "Get author documents",
+                "parameters": [
+                    {
+                        "description": " ",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controllers.GetAuthorDocuments.requestBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.GetAuthorDocuments.successResponseBody"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.GetAuthorDocuments.invalidResponseBody"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.GetAuthorDocuments.failedResponseBody"
+                        }
+                    }
+                }
+            }
+        },
+        "/documents/viewer": {
+            "post": {
+                "description": "Get all documents that belong to the viewer; the viewer has to be a existing user.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Document"
+                ],
+                "summary": "Get viewer documents",
+                "parameters": [
+                    {
+                        "description": " ",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controllers.GetViewerDocuments.requestBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.GetViewerDocuments.successResponseBody"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.GetViewerDocuments.invalidResponseBody"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.GetViewerDocuments.failedResponseBody"
                         }
                     }
                 }
@@ -257,6 +395,44 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "controllers.AddViewer.failedResponseBody": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string",
+                    "example": "Failed to add viewer to the document"
+                }
+            }
+        },
+        "controllers.AddViewer.invalidResponseBody": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string",
+                    "example": "Invalid request body"
+                }
+            }
+        },
+        "controllers.AddViewer.requestBody": {
+            "type": "object",
+            "required": [
+                "document_id",
+                "viewer_id"
+            ],
+            "properties": {
+                "document_id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "viewer_id": {
+                    "type": "integer",
+                    "example": 1
+                }
+            }
+        },
+        "controllers.AddViewer.successResponseBody": {
+            "type": "object"
+        },
         "controllers.CreateDocument.failedResponseBody": {
             "type": "object",
             "properties": {
@@ -296,6 +472,44 @@ const docTemplate = `{
                 }
             }
         },
+        "controllers.GetAuthorDocuments.failedResponseBody": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string",
+                    "example": "Failed to get documents"
+                }
+            }
+        },
+        "controllers.GetAuthorDocuments.invalidResponseBody": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string",
+                    "example": "Invalid request body"
+                }
+            }
+        },
+        "controllers.GetAuthorDocuments.requestBody": {
+            "type": "object",
+            "properties": {
+                "author_id": {
+                    "type": "integer",
+                    "example": 1
+                }
+            }
+        },
+        "controllers.GetAuthorDocuments.successResponseBody": {
+            "type": "object",
+            "properties": {
+                "documents": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/controllers.docDto"
+                    }
+                }
+            }
+        },
         "controllers.GetUsersByUsername.requestBody": {
             "type": "object",
             "required": [
@@ -331,6 +545,44 @@ const docTemplate = `{
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/controllers.UserDto"
+                    }
+                }
+            }
+        },
+        "controllers.GetViewerDocuments.failedResponseBody": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string",
+                    "example": "Failed to get documents"
+                }
+            }
+        },
+        "controllers.GetViewerDocuments.invalidResponseBody": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string",
+                    "example": "Invalid request body"
+                }
+            }
+        },
+        "controllers.GetViewerDocuments.requestBody": {
+            "type": "object",
+            "properties": {
+                "viewer_id": {
+                    "type": "integer",
+                    "example": 1
+                }
+            }
+        },
+        "controllers.GetViewerDocuments.successResponseBody": {
+            "type": "object",
+            "properties": {
+                "documents": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/controllers.docDto"
                     }
                 }
             }
@@ -499,6 +751,35 @@ const docTemplate = `{
                             "$ref": "#/definitions/controllers.UserDto"
                         }
                     ]
+                }
+            }
+        },
+        "controllers.docDto": {
+            "type": "object",
+            "properties": {
+                "author_id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "created_at": {
+                    "type": "string",
+                    "example": "2021-08-01T00:00:00Z"
+                },
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "status": {
+                    "type": "string",
+                    "example": "EDIT"
+                },
+                "title": {
+                    "type": "string",
+                    "example": "Important Document"
+                },
+                "updated_at": {
+                    "type": "string",
+                    "example": "2021-08-01T00:00:00Z"
                 }
             }
         },

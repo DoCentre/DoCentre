@@ -43,3 +43,38 @@ func UpdateDocument(doc UpdateDocumentSnapshot) (uint, error) {
 	}
 	return doc.DocumentID, nil
 }
+
+func GetAuthorDocuments(authorID uint) ([]models.Document, error) {
+	var docs []models.Document
+
+	result := repositories.DB.Where("author_id = ?", authorID).Find(&docs)
+
+	if result.Error != nil {
+		return []models.Document{}, result.Error
+	}
+
+	return docs, nil
+}
+
+func GetViewerDocuments(viewerID uint) ([]models.Document, error) {
+	var docs []models.Document
+
+	result := repositories.DB.Joins("JOIN document_viewers ON documents.id = document_viewers.document_id").Where("viewer_id = ?", viewerID).Find(&docs)
+
+	if result.Error != nil {
+		return []models.Document{}, result.Error
+	}
+
+	return docs, nil
+}
+
+func AddViewer(documentID, viewerID uint) error {
+	docViewer := models.DocumentViewer{DocumentID: documentID, ViewerID: viewerID}
+	result := repositories.DB.Create(&docViewer)
+
+	if result.Error != nil {
+		return result.Error
+	}
+
+	return nil
+}
