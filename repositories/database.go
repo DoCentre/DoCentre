@@ -24,4 +24,5 @@ func ConnectToDB(dialector gorm.Dialector, config *gorm.Config) {
 func MigrateDB() {
 	DB.AutoMigrate(&models.User{})
 	DB.AutoMigrate(&models.Document{})
+	DB.AutoMigrate(&models.DocumentViewer{})
 }

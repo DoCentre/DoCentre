@@ -1,4 +1,30 @@
 definitions:
+  controllers.AddViewer.failedResponseBody:
+    properties:
+      error:
+        example: Failed to add viewer to the document
+        type: string
+    type: object
+  controllers.AddViewer.invalidResponseBody:
+    properties:
+      error:
+        example: Invalid request body
+        type: string
+    type: object
+  controllers.AddViewer.requestBody:
+    properties:
+      document_id:
+        example: 1
+        type: integer
+      viewer_id:
+        example: 1
+        type: integer
+    required:
+    - document_id
+    - viewer_id
+    type: object
+  controllers.AddViewer.successResponseBody:
+    type: object
   controllers.CreateDocument.failedResponseBody:
     properties:
       error:
@@ -24,6 +50,31 @@ definitions:
       document_id:
         example: 1
         type: integer
+    type: object
+  controllers.GetAuthorDocuments.failedResponseBody:
+    properties:
+      error:
+        example: Failed to get documents
+        type: string
+    type: object
+  controllers.GetAuthorDocuments.invalidResponseBody:
+    properties:
+      error:
+        example: Invalid request body
+        type: string
+    type: object
+  controllers.GetAuthorDocuments.requestBody:
+    properties:
+      author_id:
+        example: 1
+        type: integer
+    type: object
+  controllers.GetAuthorDocuments.successResponseBody:
+    properties:
+      documents:
+        items:
+          $ref: '#/definitions/controllers.docDto'
+        type: array
     type: object
   controllers.GetUsersByUsername.requestBody:
     properties:
@@ -51,6 +102,31 @@ definitions:
           XXX: Consider removing the field.
         items:
           $ref: '#/definitions/controllers.UserDto'
+        type: array
+    type: object
+  controllers.GetViewerDocuments.failedResponseBody:
+    properties:
+      error:
+        example: Failed to get documents
+        type: string
+    type: object
+  controllers.GetViewerDocuments.invalidResponseBody:
+    properties:
+      error:
+        example: Invalid request body
+        type: string
+    type: object
+  controllers.GetViewerDocuments.requestBody:
+    properties:
+      viewer_id:
+        example: 1
+        type: integer
+    type: object
+  controllers.GetViewerDocuments.successResponseBody:
+    properties:
+      documents:
+        items:
+          $ref: '#/definitions/controllers.docDto'
         type: array
     type: object
   controllers.UpdateDocument.failedResponseBody:
@@ -170,6 +246,27 @@ definitions:
           Should always be nil.
           XXX: Consider removing the field; also swaggo fails to generate example with null value.
     type: object
+  controllers.docDto:
+    properties:
+      author_id:
+        example: 1
+        type: integer
+      created_at:
+        example: "2021-08-01T00:00:00Z"
+        type: string
+      id:
+        example: 1
+        type: integer
+      status:
+        example: EDIT
+        type: string
+      title:
+        example: Important Document
+        type: string
+      updated_at:
+        example: "2021-08-01T00:00:00Z"
+        type: string
+    type: object
   controllers.invalidResponseBody:
     properties:
       msg:
@@ -215,6 +312,36 @@ paths:
       summary: Create document
       tags:
       - Document
+  /document/add/viewer:
+    post:
+      consumes:
+      - application/json
+      description: Add a viewer to the document; the viewer has to be a existing user.
+      parameters:
+      - description: ' '
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.AddViewer.requestBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.AddViewer.successResponseBody'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.AddViewer.invalidResponseBody'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/controllers.AddViewer.failedResponseBody'
+      summary: Add viewer
+      tags:
+      - Document
   /document/update:
     put:
       consumes:
@@ -244,6 +371,68 @@ paths:
           schema:
             $ref: '#/definitions/controllers.UpdateDocument.failedResponseBody'
       summary: Update document
+      tags:
+      - Document
+  /documents/author:
+    post:
+      consumes:
+      - application/json
+      description: Get all documents that belong to the author; the author has to
+        be a existing user.
+      parameters:
+      - description: ' '
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.GetAuthorDocuments.requestBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.GetAuthorDocuments.successResponseBody'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.GetAuthorDocuments.invalidResponseBody'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/controllers.GetAuthorDocuments.failedResponseBody'
+      summary: Get author documents
+      tags:
+      - Document
+  /documents/viewer:
+    post:
+      consumes:
+      - application/json
+      description: Get all documents that belong to the viewer; the viewer has to
+        be a existing user.
+      parameters:
+      - description: ' '
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.GetViewerDocuments.requestBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.GetViewerDocuments.successResponseBody'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.GetViewerDocuments.invalidResponseBody'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/controllers.GetViewerDocuments.failedResponseBody'
+      summary: Get viewer documents
       tags:
       - Document
   /health:
