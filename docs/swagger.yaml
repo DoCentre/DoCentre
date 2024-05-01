@@ -91,10 +91,10 @@ definitions:
           $ref: '#/definitions/controllers.UserDto'
         type: array
     type: object
-  controllers.GetUsersByUsername.usersNotFoundResponseBody:
+  controllers.GetUsersByUsername.unexpectedErrorResponseBody:
     properties:
       msg:
-        example: Users not found
+        example: Unexpected error
         type: string
     type: object
   controllers.GetViewerDocuments.failedResponseBody:
@@ -518,7 +518,7 @@ paths:
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/controllers.GetUsersByUsername.usersNotFoundResponseBody'
+            $ref: '#/definitions/controllers.GetUsersByUsername.unexpectedErrorResponseBody'
       summary: Get users by username
       tags:
       - User

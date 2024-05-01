@@ -393,7 +393,7 @@ const docTemplate = `{
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/controllers.GetUsersByUsername.usersNotFoundResponseBody"
+                            "$ref": "#/definitions/controllers.GetUsersByUsername.unexpectedErrorResponseBody"
                         }
                     }
                 }
@@ -539,12 +539,12 @@ const docTemplate = `{
                 }
             }
         },
-        "controllers.GetUsersByUsername.usersNotFoundResponseBody": {
+        "controllers.GetUsersByUsername.unexpectedErrorResponseBody": {
             "type": "object",
             "properties": {
                 "msg": {
                     "type": "string",
-                    "example": "Users not found"
+                    "example": "Unexpected error"
                 }
             }
         },

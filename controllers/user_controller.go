@@ -133,14 +133,15 @@ func UserLogin(c *gin.Context) {
 // @Param body body controllers.GetUsersByUsername.requestBody true " "
 // @Success 200 {object} controllers.GetUsersByUsername.successResponseBody
 // @Failure 400 {object} invalidResponseBody
-// @Failure 500 {object} controllers.GetUsersByUsername.usersNotFoundResponseBody
+// @Failure 500 {object} controllers.GetUsersByUsername.unexpectedErrorResponseBody
 // @Router /users [post]
 func GetUsersByUsername(c *gin.Context) {
 	type requestBody struct {
 		Username string `json:"username" binding:"required" example:"username"`
 	}
-	type usersNotFoundResponseBody struct {
-		Msg string `json:"msg" example:"Users not found"`
+	// errorResponseBody the request failed due to unexpected error.
+	type unexpectedErrorResponseBody struct {
+		Msg string `json:"msg" example:"Unexpected error"`
 	}
 	type successResponseBody struct {
 		Users []UserDto `json:"users"`
@@ -156,11 +157,12 @@ func GetUsersByUsername(c *gin.Context) {
 		return
 	}
 
+	// NOTE: A non-exist username does not return an error. It returns an empty array.
 	users, err := services.GetUsersByUsername(body.Username)
 	if err != nil {
 		log.Println(err)
-		c.JSON(http.StatusInternalServerError, usersNotFoundResponseBody{
-			Msg: "Users not found",
+		c.JSON(http.StatusInternalServerError, unexpectedErrorResponseBody{
+			Msg: "Unexpected error",
 		})
 		return
 	}
