@@ -11,13 +11,13 @@ type User struct {
 }
 
 type Document struct {
-	ID       uint `gorm:"primaryKey"`
-	AuthorID uint `gorm:"foreignKey:AuthorID"`
-	Title    string
-	Content  string
-	Appendix string
-	Status   string `gorm:"not null;check:status IN ('EDIT', 'VERIFY', 'REJECT', 'APPROVE');default:'EDIT'"` // EDIT, VERIFY, REJECT, APPROVE
-	// RejectReason string // should be in history table
+	ID           uint `gorm:"primaryKey"`
+	AuthorID     uint `gorm:"foreignKey:AuthorID"`
+	Title        string
+	Content      string
+	Appendix     string
+	Status       string    `gorm:"not null;check:status IN ('EDIT', 'VERIFY', 'REJECT', 'APPROVE');default:'EDIT'"` // EDIT, VERIFY, REJECT, APPROVE
+	Comment      string    `gorm:"default:''"`
 	CreatedAt    time.Time // 建立時間（由GORM自動管理）
 	UpdatedAt    time.Time // 最後一次更新時間（由GORM自動管理）
 	ApprovedDate time.Time
