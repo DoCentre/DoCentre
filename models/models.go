@@ -3,17 +3,16 @@ package models
 import "time"
 
 type User struct {
-	ID        uint       `gorm:"primaryKey"`
-	Username  string     `gorm:"unique;not null"`
-	Email     string     `gorm:"unique;not null"`
-	Password  string     `gorm:"not null"`
-	Identity  string     `gorm:"not null;default:'user'"` // user, admin
-	Documents []Document `gorm:"foreignKey:AuthorID"`     // foreign key only ; not a real field
+	ID       uint   `gorm:"primaryKey"`
+	Username string `gorm:"unique;not null"`
+	Email    string `gorm:"unique;not null"`
+	Password string `gorm:"not null"`
+	Identity string `gorm:"not null;default:'user'"` // user, admin
 }
 
 type Document struct {
 	ID       uint `gorm:"primaryKey"`
-	AuthorID uint
+	AuthorID uint `gorm:"foreignKey:AuthorID"`
 	Title    string
 	Content  string
 	Appendix string
