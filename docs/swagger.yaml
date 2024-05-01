@@ -122,6 +122,39 @@ definitions:
           $ref: '#/definitions/controllers.docDto'
         type: array
     type: object
+  controllers.SetDocumentStatus.failedResponseBody:
+    properties:
+      error:
+        example: Failed to set document status
+        type: string
+    type: object
+  controllers.SetDocumentStatus.invalidResponseBody:
+    properties:
+      error:
+        example: Invalid request body
+        type: string
+    type: object
+  controllers.SetDocumentStatus.requestBody:
+    properties:
+      approver_id:
+        example: 1
+        type: integer
+      comment:
+        example: It looks bad :(
+        type: string
+      document_id:
+        example: 1
+        type: integer
+      status:
+        example: REJECT
+        type: string
+    required:
+    - comment
+    - document_id
+    - status
+    type: object
+  controllers.SetDocumentStatus.successResponseBody:
+    type: object
   controllers.UpdateDocument.failedResponseBody:
     properties:
       error:
@@ -358,6 +391,37 @@ paths:
           schema:
             $ref: '#/definitions/controllers.UpdateDocument.failedResponseBody'
       summary: Update document
+      tags:
+      - Document
+  /document/update/status:
+    put:
+      consumes:
+      - application/json
+      description: Set the status of the document; the approver has to be a existing
+        user.
+      parameters:
+      - description: ' '
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.SetDocumentStatus.requestBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.SetDocumentStatus.successResponseBody'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.SetDocumentStatus.invalidResponseBody'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/controllers.SetDocumentStatus.failedResponseBody'
+      summary: Set document status
       tags:
       - Document
   /documents/author:
