@@ -89,10 +89,7 @@ func UserLogin(c *gin.Context) {
 		Password string `json:"password" binding:"required" example:"password"`
 	}
 	type userNotFoundResponseBody struct {
-		// Should always be nil.
-		// XXX: Consider removing the field; also swaggo fails to generate example with null value.
-		User *UserDto `json:"user"`
-		Msg  string   `json:"msg" example:"User not found"`
+		Msg string `json:"msg" example:"User not found"`
 	}
 	type successResponseBody struct {
 		User UserDto `json:"user"`
@@ -112,8 +109,7 @@ func UserLogin(c *gin.Context) {
 	if err != nil {
 		log.Println(err)
 		c.JSON(http.StatusNotFound, userNotFoundResponseBody{
-			User: nil,
-			Msg:  "User not found",
+			Msg: "User not found",
 		})
 		return
 	}
@@ -144,10 +140,7 @@ func GetUsersByUsername(c *gin.Context) {
 		Username string `json:"username" binding:"required" example:"username"`
 	}
 	type usersNotFoundResponseBody struct {
-		// Should always be empty.
-		// XXX: Consider removing the field.
-		Users []UserDto `json:"users"`
-		Msg   string    `json:"msg" example:"Users not found"`
+		Msg string `json:"msg" example:"Users not found"`
 	}
 	type successResponseBody struct {
 		Users []UserDto `json:"users"`
@@ -167,8 +160,7 @@ func GetUsersByUsername(c *gin.Context) {
 	if err != nil {
 		log.Println(err)
 		c.JSON(http.StatusOK, usersNotFoundResponseBody{
-			Users: []UserDto{},
-			Msg:   "Users not found",
+			Msg: "Users not found",
 		})
 		return
 	}

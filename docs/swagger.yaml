@@ -96,13 +96,6 @@ definitions:
       msg:
         example: Users not found
         type: string
-      users:
-        description: |-
-          Should always be empty.
-          XXX: Consider removing the field.
-        items:
-          $ref: '#/definitions/controllers.UserDto'
-        type: array
     type: object
   controllers.GetViewerDocuments.failedResponseBody:
     properties:
@@ -239,12 +232,6 @@ definitions:
       msg:
         example: User not found
         type: string
-      user:
-        allOf:
-        - $ref: '#/definitions/controllers.UserDto'
-        description: |-
-          Should always be nil.
-          XXX: Consider removing the field; also swaggo fails to generate example with null value.
     type: object
   controllers.docDto:
     properties:

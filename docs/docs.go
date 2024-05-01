@@ -539,13 +539,6 @@ const docTemplate = `{
                 "msg": {
                     "type": "string",
                     "example": "Users not found"
-                },
-                "users": {
-                    "description": "Should always be empty.\nXXX: Consider removing the field.",
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/controllers.UserDto"
-                    }
                 }
             }
         },
@@ -743,14 +736,6 @@ const docTemplate = `{
                 "msg": {
                     "type": "string",
                     "example": "User not found"
-                },
-                "user": {
-                    "description": "Should always be nil.\nXXX: Consider removing the field; also swaggo fails to generate example with null value.",
-                    "allOf": [
-                        {
-                            "$ref": "#/definitions/controllers.UserDto"
-                        }
-                    ]
                 }
             }
         },
