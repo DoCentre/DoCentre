@@ -381,13 +381,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/controllers.GetUsersByUsername.usersNotFoundResponseBody"
+                            "$ref": "#/definitions/controllers.GetUsersByUsername.successResponseBody"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
                             "$ref": "#/definitions/controllers.invalidResponseBody"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.GetUsersByUsername.usersNotFoundResponseBody"
                         }
                     }
                 }

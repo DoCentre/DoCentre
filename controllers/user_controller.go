@@ -133,7 +133,7 @@ func UserLogin(c *gin.Context) {
 // @Param body body controllers.GetUsersByUsername.requestBody true " "
 // @Success 200 {object} controllers.GetUsersByUsername.successResponseBody
 // @Failure 400 {object} invalidResponseBody
-// @Failure 200 {object} controllers.GetUsersByUsername.usersNotFoundResponseBody
+// @Failure 500 {object} controllers.GetUsersByUsername.usersNotFoundResponseBody
 // @Router /users [post]
 func GetUsersByUsername(c *gin.Context) {
 	type requestBody struct {
@@ -159,7 +159,7 @@ func GetUsersByUsername(c *gin.Context) {
 	users, err := services.GetUsersByUsername(body.Username)
 	if err != nil {
 		log.Println(err)
-		c.JSON(http.StatusOK, usersNotFoundResponseBody{
+		c.JSON(http.StatusInternalServerError, usersNotFoundResponseBody{
 			Msg: "Users not found",
 		})
 		return
