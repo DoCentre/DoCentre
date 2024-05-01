@@ -49,7 +49,7 @@ func setDocumentController(r *gin.Engine) {
 	r.POST("/document/add/viewer", controllers.AddViewer)
 	r.POST("/documents/author", controllers.GetAuthorDocuments)
 	r.POST("/documents/viewer", controllers.GetViewerDocuments)
-	// TODO r.PATCH("/documents/:document_id/status", controllers.SetDocumentStatus)
+	r.PUT("/document/update/status", controllers.SetDocumentStatus)
 }
 
 func SetupRouter() *gin.Engine {
