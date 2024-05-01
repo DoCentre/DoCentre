@@ -16,7 +16,7 @@ type Document struct {
 	Title    string
 	Content  string
 	Appendix string
-	Status   string `gorm:"not null;default:'EDIT'"` // EDIT, VERIFY, REJECT, APPROVE
+	Status   string `gorm:"not null;check:status IN ('EDIT', 'VERIFY', 'REJECT', 'APPROVE');default:'EDIT'"` // EDIT, VERIFY, REJECT, APPROVE
 	// RejectReason string // should be in history table
 	CreatedAt    time.Time // 建立時間（由GORM自動管理）
 	UpdatedAt    time.Time // 最後一次更新時間（由GORM自動管理）
