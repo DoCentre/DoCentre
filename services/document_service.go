@@ -78,3 +78,13 @@ func AddViewer(documentID, viewerID uint) error {
 
 	return nil
 }
+
+// SetDocumentStatus sets the status of the document, as well as the approverID and comment.
+func SetDocumentStatus(documentID uint, status string, approverID uint, comment string) error {
+	result := repositories.DB.Model(&models.Document{}).Where("id = ?", documentID).Updates(map[string]interface{}{
+		"status":      status,
+		"approver_id": approverID,
+		"comment":     comment,
+	})
+	return result.Error
+}
