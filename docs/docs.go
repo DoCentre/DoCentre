@@ -381,13 +381,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/controllers.GetUsersByUsername.usersNotFoundResponseBody"
+                            "$ref": "#/definitions/controllers.GetUsersByUsername.successResponseBody"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
                             "$ref": "#/definitions/controllers.invalidResponseBody"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.GetUsersByUsername.unexpectedErrorResponseBody"
                         }
                     }
                 }
@@ -533,19 +539,12 @@ const docTemplate = `{
                 }
             }
         },
-        "controllers.GetUsersByUsername.usersNotFoundResponseBody": {
+        "controllers.GetUsersByUsername.unexpectedErrorResponseBody": {
             "type": "object",
             "properties": {
                 "msg": {
                     "type": "string",
-                    "example": "Users not found"
-                },
-                "users": {
-                    "description": "Should always be empty.\nXXX: Consider removing the field.",
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/controllers.UserDto"
-                    }
+                    "example": "Unexpected error"
                 }
             }
         },
@@ -743,14 +742,6 @@ const docTemplate = `{
                 "msg": {
                     "type": "string",
                     "example": "User not found"
-                },
-                "user": {
-                    "description": "Should always be nil.\nXXX: Consider removing the field; also swaggo fails to generate example with null value.",
-                    "allOf": [
-                        {
-                            "$ref": "#/definitions/controllers.UserDto"
-                        }
-                    ]
                 }
             }
         },
