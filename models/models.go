@@ -23,15 +23,15 @@ type Document struct {
 	ApprovedDate time.Time
 	// foreign keys to User
 	ApproverID uint `gorm:"foreignKey:ApproverID"`
-	Author     User `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
-	Approver   User `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+	Author     User `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	Approver   User `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 }
 
 // / DocumentHistory stores the history of the status changes of a document.
 type DocumentHistory struct {
 	ID         uint     `gorm:"primaryKey"`
 	DocumentID uint     `gorm:"foreignKey:DocumentID"`
-	Document   Document `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+	Document   Document `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 	Status     string   `gorm:"not null;check:status IN ('EDIT', 'VERIFY', 'REJECT', 'APPROVE');default:'EDIT'"` // EDIT, VERIFY, REJECT, APPROVE
 	Comment    string   `gorm:"default:''"`
 	CreatedAt  time.Time
@@ -42,6 +42,6 @@ type DocumentViewer struct {
 	// foreign keys to Document and User
 	DocumentID uint     `gorm:"foreignKey:DocumentID"`
 	ViewerID   uint     `gorm:"foreignKey:ViewerID"`
-	Document   Document `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
-	Viewer     User     `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+	Document   Document `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	Viewer     User     `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 }
