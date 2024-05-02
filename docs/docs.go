@@ -153,6 +153,52 @@ const docTemplate = `{
                 }
             }
         },
+        "/document/update/status": {
+            "put": {
+                "description": "Set the status of the document; the approver has to be a existing user.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Document"
+                ],
+                "summary": "Set document status",
+                "parameters": [
+                    {
+                        "description": " ",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controllers.SetDocumentStatus.requestBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.SetDocumentStatus.successResponseBody"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.SetDocumentStatus.invalidResponseBody"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.SetDocumentStatus.failedResponseBody"
+                        }
+                    }
+                }
+            }
+        },
         "/documents/author": {
             "post": {
                 "description": "Get all documents that belong to the author; the author has to be a existing user.",
@@ -585,6 +631,53 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "controllers.SetDocumentStatus.failedResponseBody": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string",
+                    "example": "Failed to set document status"
+                }
+            }
+        },
+        "controllers.SetDocumentStatus.invalidResponseBody": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string",
+                    "example": "Invalid request body"
+                }
+            }
+        },
+        "controllers.SetDocumentStatus.requestBody": {
+            "type": "object",
+            "required": [
+                "comment",
+                "document_id",
+                "status"
+            ],
+            "properties": {
+                "approver_id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "comment": {
+                    "type": "string",
+                    "example": "It looks bad :("
+                },
+                "document_id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "status": {
+                    "type": "string",
+                    "example": "REJECT"
+                }
+            }
+        },
+        "controllers.SetDocumentStatus.successResponseBody": {
+            "type": "object"
         },
         "controllers.UpdateDocument.failedResponseBody": {
             "type": "object",

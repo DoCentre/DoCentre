@@ -25,4 +25,5 @@ func MigrateDB() {
 	DB.AutoMigrate(&models.User{})
 	DB.AutoMigrate(&models.Document{})
 	DB.AutoMigrate(&models.DocumentViewer{})
+	DB.AutoMigrate(&models.DocumentHistory{})
 }

@@ -11,13 +11,13 @@ type User struct {
 }
 
 type Document struct {
-	ID       uint `gorm:"primaryKey"`
-	AuthorID uint `gorm:"foreignKey:AuthorID"`
-	Title    string
-	Content  string
-	Appendix string
-	Status   string `gorm:"not null;default:'EDIT'"` // EDIT, VERIFY, REJECT, APPROVE
-	// RejectReason string // should be in history table
+	ID           uint `gorm:"primaryKey"`
+	AuthorID     uint `gorm:"foreignKey:AuthorID"`
+	Title        string
+	Content      string
+	Appendix     string
+	Status       string    `gorm:"not null;check:status IN ('EDIT', 'VERIFY', 'REJECT', 'APPROVE');default:'EDIT'"` // EDIT, VERIFY, REJECT, APPROVE
+	Comment      string    `gorm:"default:''"`
 	CreatedAt    time.Time // 建立時間（由GORM自動管理）
 	UpdatedAt    time.Time // 最後一次更新時間（由GORM自動管理）
 	ApprovedDate time.Time
@@ -25,6 +25,16 @@ type Document struct {
 	ApproverID uint `gorm:"foreignKey:ApproverID"`
 	Author     User `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 	Approver   User `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+}
+
+// / DocumentHistory stores the history of the status changes of a document.
+type DocumentHistory struct {
+	ID         uint     `gorm:"primaryKey"`
+	DocumentID uint     `gorm:"foreignKey:DocumentID"`
+	Document   Document `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+	Status     string   `gorm:"not null;check:status IN ('EDIT', 'VERIFY', 'REJECT', 'APPROVE');default:'EDIT'"` // EDIT, VERIFY, REJECT, APPROVE
+	Comment    string   `gorm:"default:''"`
+	CreatedAt  time.Time
 }
 
 type DocumentViewer struct {

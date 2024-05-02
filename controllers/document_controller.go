@@ -293,3 +293,50 @@ func AddViewer(c *gin.Context) {
 
 	c.JSON(http.StatusOK, successResponseBody{})
 }
+
+// @Summary Set document status
+// @Description Set the status of the document; the approver has to be a existing user.
+// @Tags Document
+// @Accept json
+// @Produce json
+// @Param body body controllers.SetDocumentStatus.requestBody true " "
+// @Success 200 {object} controllers.SetDocumentStatus.successResponseBody
+// @Failure 400 {object} controllers.SetDocumentStatus.invalidResponseBody
+// @Failure 500 {object} controllers.SetDocumentStatus.failedResponseBody
+// @Router /document/update/status [put]
+func SetDocumentStatus(c *gin.Context) {
+	type requestBody struct {
+		DocumentID uint   `json:"document_id" binding:"required" example:"1"`
+		AppoverID  uint   `json:"approver_id" example:"1"`
+		Status     string `json:"status" binding:"required" example:"REJECT"`
+		Commnet    string `json:"comment" binding:"required" example:"It looks bad :("`
+	}
+	type invalidResponseBody struct {
+		Error string `json:"error" example:"Invalid request body"`
+	}
+	type failedResponseBody struct {
+		Error string `json:"error" example:"Failed to set document status"`
+	}
+	type successResponseBody struct{}
+
+	var body requestBody
+	err := c.BindJSON(&body)
+	if err != nil {
+		log.Println(err)
+		c.JSON(http.StatusBadRequest, invalidResponseBody{
+			Error: "Invalid request body",
+		})
+		return
+	}
+
+	err = services.SetDocumentStatus(body.DocumentID, body.Status, body.AppoverID, body.Commnet)
+	if err != nil {
+		log.Println(err)
+		c.JSON(http.StatusInternalServerError, failedResponseBody{
+			Error: "Failed to set document status",
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, successResponseBody{})
+}
