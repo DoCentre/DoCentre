@@ -79,12 +79,27 @@ func AddViewer(documentID, viewerID uint) error {
 	return nil
 }
 
-// SetDocumentStatus sets the status of the document, as well as the approverID and comment.
+// SetDocumentStatus sets the status of the document, as well as the approverID (if present) and comment.
+// These changes are also recorded in the DocumentHistory table.
 func SetDocumentStatus(documentID uint, status string, approverID uint, comment string) error {
-	result := repositories.DB.Model(&models.Document{}).Where("id = ?", documentID).Updates(map[string]interface{}{
-		"status":      status,
-		"approver_id": approverID,
-		"comment":     comment,
+	// Set the status of the document
+	var noApproverYet uint = 0
+	var statusMap map[string]interface{}
+	if approverID == noApproverYet {
+		statusMap = map[string]interface{}{"status": status}
+	} else {
+		statusMap = map[string]interface{}{"status": status, "approver_id": approverID}
+	}
+	result := repositories.DB.Model(&models.Document{}).Where("id = ?", documentID).Updates(statusMap)
+	if result.Error != nil {
+		return result.Error
+	}
+
+	// Record the status change in the DocumentHistory table.
+	result = repositories.DB.Model(&models.DocumentHistory{}).Create(&models.DocumentHistory{
+		DocumentID: documentID,
+		Status:     status,
+		Comment:    comment,
 	})
 	return result.Error
 }

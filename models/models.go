@@ -27,6 +27,16 @@ type Document struct {
 	Approver   User `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 }
 
+// / DocumentHistory stores the history of the status changes of a document.
+type DocumentHistory struct {
+	ID         uint     `gorm:"primaryKey"`
+	DocumentID uint     `gorm:"foreignKey:DocumentID"`
+	Document   Document `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+	Status     string   `gorm:"not null;check:status IN ('EDIT', 'VERIFY', 'REJECT', 'APPROVE');default:'EDIT'"` // EDIT, VERIFY, REJECT, APPROVE
+	Comment    string   `gorm:"default:''"`
+	CreatedAt  time.Time
+}
+
 type DocumentViewer struct {
 	ID uint `gorm:"primaryKey"`
 	// foreign keys to Document and User
