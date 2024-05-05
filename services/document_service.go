@@ -1,6 +1,8 @@
 package services
 
 import (
+	"fmt"
+
 	"github.com/docentre/docentre/models"
 	"github.com/docentre/docentre/repositories"
 )
@@ -102,4 +104,26 @@ func SetDocumentStatus(documentID uint, status string, approverID uint, comment 
 		Comment:    comment,
 	})
 	return result.Error
+}
+
+// GetDocumentHistories returns the history of the document with the given documentID. The user indicated by userID has to have permission to view the document.
+// In case that the user does not have permission, an error is returned.
+func GetDocumentHistories(documentID uint, userID uint) ([]models.DocumentHistory, error) {
+	var document models.Document
+	result := repositories.DB.Where("id = ?", documentID).First(&document)
+	if result.Error != nil {
+		return []models.DocumentHistory{}, result.Error
+	}
+
+	// Check if the user has permission to view the document.
+	if document.AuthorID != userID && document.ApproverID != userID {
+		return []models.DocumentHistory{}, fmt.Errorf("user %d does not have the permission to view the document %d", userID, documentID)
+	}
+
+	var histories []models.DocumentHistory
+	result = repositories.DB.Where("document_id = ?", documentID).Find(&histories)
+	if result.Error != nil {
+		return []models.DocumentHistory{}, result.Error
+	}
+	return histories, nil
 }

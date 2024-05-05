@@ -340,3 +340,68 @@ func SetDocumentStatus(c *gin.Context) {
 
 	c.JSON(http.StatusOK, successResponseBody{})
 }
+
+type historyDto struct {
+	Status    string `json:"status" example:"EDIT"`
+	Comment   string `json:"comment" example:"It looks bad :("`
+	CreatedAt string `json:"created_at" example:"2021-08-01T00:00:00Z"`
+}
+
+// @Summary Get document histories
+// @Description Get all histories of the document; the document has to exist, and the user has to have permission to view such document.
+// @Tags Document
+// @Accept json
+// @Produce json
+// @Param body body controllers.GetDocumentHistories.requestBody true " "
+// @Success 200 {object} controllers.GetDocumentHistories.successResponseBody
+// @Failure 400 {object} controllers.GetDocumentHistories.invalidResponseBody
+// @Failure 500 {object} controllers.GetDocumentHistories.failedResponseBody
+// @Router /document/histories [post]
+func GetDocumentHistories(c *gin.Context) {
+	type requestBody struct {
+		DocumentID uint `json:"document_id" binding:"required" example:"1"`
+		UserID     uint `json:"user_id" binding:"required" example:"1"`
+	}
+	type invalidResponseBody struct {
+		Error string `json:"error" example:"Invalid request body"`
+	}
+	type failedResponseBody struct {
+		Error string `json:"error" example:"Failed to get document history"`
+	}
+	type successResponseBody struct {
+		Histories []historyDto `json:"histories"`
+	}
+
+	var body requestBody
+	err := c.BindJSON(&body)
+	if err != nil {
+		log.Println(err)
+		c.JSON(http.StatusBadRequest, invalidResponseBody{
+			Error: "Invalid request body",
+		})
+		return
+	}
+
+	histories, err := services.GetDocumentHistories(body.DocumentID, body.UserID)
+	if err != nil {
+		log.Println(err)
+		c.JSON(http.StatusInternalServerError, failedResponseBody{
+			Error: "Failed to get document history",
+		})
+		return
+	}
+
+	var historiesDto []historyDto
+
+	for _, history := range histories {
+		historiesDto = append(historiesDto, historyDto{
+			Status:    history.Status,
+			Comment:   history.Comment,
+			CreatedAt: history.CreatedAt.String(),
+		})
+	}
+
+	c.JSON(http.StatusOK, successResponseBody{
+		Histories: historiesDto,
+	})
+}
