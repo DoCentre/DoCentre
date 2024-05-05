@@ -107,6 +107,52 @@ const docTemplate = `{
                 }
             }
         },
+        "/document/histories": {
+            "post": {
+                "description": "Get all histories of the document; the document has to exist, and the user has to have permission to view such document.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Document"
+                ],
+                "summary": "Get document histories",
+                "parameters": [
+                    {
+                        "description": " ",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controllers.GetDocumentHistories.requestBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.GetDocumentHistories.successResponseBody"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.GetDocumentHistories.invalidResponseBody"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.GetDocumentHistories.failedResponseBody"
+                        }
+                    }
+                }
+            }
+        },
         "/document/update": {
             "put": {
                 "description": "Update a document that belongs to the author; the author has to be a existing user. if no approver yet, approver_id should be 0.",
@@ -562,6 +608,52 @@ const docTemplate = `{
                 }
             }
         },
+        "controllers.GetDocumentHistories.failedResponseBody": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string",
+                    "example": "Failed to get document history"
+                }
+            }
+        },
+        "controllers.GetDocumentHistories.invalidResponseBody": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string",
+                    "example": "Invalid request body"
+                }
+            }
+        },
+        "controllers.GetDocumentHistories.requestBody": {
+            "type": "object",
+            "required": [
+                "document_id",
+                "user_id"
+            ],
+            "properties": {
+                "document_id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "user_id": {
+                    "type": "integer",
+                    "example": 1
+                }
+            }
+        },
+        "controllers.GetDocumentHistories.successResponseBody": {
+            "type": "object",
+            "properties": {
+                "histories": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/controllers.historyDto"
+                    }
+                }
+            }
+        },
         "controllers.GetUsersByUsername.requestBody": {
             "type": "object",
             "required": [
@@ -864,6 +956,23 @@ const docTemplate = `{
                 "updated_at": {
                     "type": "string",
                     "example": "2021-08-01T00:00:00Z"
+                }
+            }
+        },
+        "controllers.historyDto": {
+            "type": "object",
+            "properties": {
+                "comment": {
+                    "type": "string",
+                    "example": "It looks bad :("
+                },
+                "created_at": {
+                    "type": "string",
+                    "example": "2021-08-01T00:00:00Z"
+                },
+                "status": {
+                    "type": "string",
+                    "example": "EDIT"
                 }
             }
         },
