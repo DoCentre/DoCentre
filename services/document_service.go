@@ -116,7 +116,7 @@ func GetDocumentHistories(documentID uint, userID uint) ([]models.DocumentHistor
 	}
 
 	// Check if the user has permission to view the document.
-	if document.AuthorID != userID && document.ApproverID != userID {
+	if document.AuthorID != userID && document.ApproverID != userID && !isAdmin(userID) {
 		return []models.DocumentHistory{}, fmt.Errorf("user %d does not have the permission to view the document %d", userID, documentID)
 	}
 
@@ -126,4 +126,13 @@ func GetDocumentHistories(documentID uint, userID uint) ([]models.DocumentHistor
 		return []models.DocumentHistory{}, result.Error
 	}
 	return histories, nil
+}
+
+func isAdmin(userID uint) bool {
+	var user models.User
+	result := repositories.DB.Where("id = ?", userID).First(&user)
+	if result.Error != nil {
+		return false
+	}
+	return user.Identity == "admin"
 }
