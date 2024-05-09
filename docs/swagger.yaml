@@ -404,6 +404,35 @@ info:
   contact: {}
 paths:
   /document:
+    delete:
+      consumes:
+      - application/json
+      description: Delete the document; the user should have authorization to delete.
+      parameters:
+      - description: ' '
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.DeleteDocument.requestBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.DeleteDocument.successResponseBody'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.DeleteDocument.invalidResponseBody'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/controllers.DeleteDocument.failedResponseBody'
+      summary: Delete document
+      tags:
+      - Document
     post:
       consumes:
       - application/json
@@ -493,36 +522,6 @@ paths:
           schema:
             $ref: '#/definitions/controllers.GetDocumentContent.failedResponseBody'
       summary: Get document content
-      tags:
-      - Document
-  /document/delete:
-    delete:
-      consumes:
-      - application/json
-      description: Delete the document; the user should have authorization to delete.
-      parameters:
-      - description: ' '
-        in: body
-        name: body
-        required: true
-        schema:
-          $ref: '#/definitions/controllers.DeleteDocument.requestBody'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/controllers.DeleteDocument.successResponseBody'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/controllers.DeleteDocument.invalidResponseBody'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/controllers.DeleteDocument.failedResponseBody'
-      summary: Delete document
       tags:
       - Document
   /document/histories:
