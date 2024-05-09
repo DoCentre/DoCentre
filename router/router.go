@@ -51,7 +51,7 @@ func setDocumentController(r *gin.Engine) {
 	r.POST("/documents/viewer", controllers.GetViewerDocuments)
 	r.PUT("/document/update/status", controllers.SetDocumentStatus)
 	r.POST("/document/histories", controllers.GetDocumentHistories)
-	r.DELETE("/document/delete", controllers.DeleteDocument)
+	r.DELETE("/document", controllers.DeleteDocument)
 	r.GET("/document/content", controllers.GetDocumentContent)
 }
 

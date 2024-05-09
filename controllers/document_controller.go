@@ -415,7 +415,7 @@ func GetDocumentHistories(c *gin.Context) {
 // @Success 200 {object} controllers.DeleteDocument.successResponseBody
 // @Failure 400 {object} controllers.DeleteDocument.invalidResponseBody
 // @Failure 500 {object} controllers.DeleteDocument.failedResponseBody
-// @Router /document/delete [delete]
+// @Router /document [delete]
 func DeleteDocument(c *gin.Context) {
 	type requestBody struct {
 		AuthorID   uint `json:"author_id" binding:"required" example:"1"`
