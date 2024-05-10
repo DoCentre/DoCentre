@@ -136,3 +136,38 @@ func isAdmin(userID uint) bool {
 	}
 	return user.Identity == "admin"
 }
+
+func DeleteDocument(authorID, documentID uint) error {
+	var document models.Document
+	result := repositories.DB.Where("id = ?", documentID).First(&document)
+	if result.Error != nil {
+		return fmt.Errorf("document %d not found", documentID)
+	}
+
+	// Check if the user has permission to delete the document.
+	if document.AuthorID != authorID && !isAdmin(authorID) {
+		return fmt.Errorf("user %d does not have the permission to delete the document %d", authorID, documentID)
+	}
+
+	result = repositories.DB.Delete(&document)
+	if result.Error != nil {
+		return result.Error
+	}
+
+	return nil
+}
+
+func GetDocumentContent(userID, documentID uint) (models.Document, error) {
+	var document models.Document
+	result := repositories.DB.Where("id = ?", documentID).First(&document)
+	if result.Error != nil {
+		return document, result.Error
+	}
+
+	// Check if the user has permission to get the document content.
+	if document.AuthorID != userID && document.ApproverID != userID && !isAdmin(userID) {
+		return document, fmt.Errorf("user %d does not have the permission to view the document %d", userID, documentID)
+	}
+
+	return document, nil
+}

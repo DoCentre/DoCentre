@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/docentre/docentre/models"
 	"github.com/docentre/docentre/services"
 	"github.com/gin-gonic/gin"
 )
@@ -403,5 +404,99 @@ func GetDocumentHistories(c *gin.Context) {
 
 	c.JSON(http.StatusOK, successResponseBody{
 		Histories: historiesDto,
+	})
+}
+
+// @Summary Delete document
+// @Description Delete the document; the user should have authorization to delete.
+// @Tags Document
+// @Accept json
+// @Produce json
+// @Param body body controllers.DeleteDocument.requestBody true " "
+// @Success 200 {object} controllers.DeleteDocument.successResponseBody
+// @Failure 400 {object} controllers.DeleteDocument.invalidResponseBody
+// @Failure 500 {object} controllers.DeleteDocument.failedResponseBody
+// @Router /document [delete]
+func DeleteDocument(c *gin.Context) {
+	type requestBody struct {
+		AuthorID   uint `json:"author_id" binding:"required" example:"1"`
+		DocumentID uint `json:"document_id" binding:"required" example:"1"`
+	}
+	type invalidResponseBody struct {
+		Error string `json:"error" example:"Invalid request body"`
+	}
+	type failedResponseBody struct {
+		Error string `json:"error" example:"Failed to delete document"`
+	}
+	type successResponseBody struct{}
+
+	var body requestBody
+	err := c.BindJSON(&body)
+	if err != nil {
+		log.Println(err)
+		c.JSON(http.StatusBadRequest, invalidResponseBody{
+			Error: "Invalid request body",
+		})
+		return
+	}
+
+	err = services.DeleteDocument(body.AuthorID, body.DocumentID)
+	if err != nil {
+		log.Println(err)
+		c.JSON(http.StatusInternalServerError, failedResponseBody{
+			Error: "Failed to delete document",
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, successResponseBody{})
+}
+
+// @Summary Get document content
+// @Description Get the document content; the user should have authorization to get the content.
+// @Tags Document
+// @Accept json
+// @Produce json
+// @Param body body controllers.GetDocumentContent.requestBody true " "
+// @Success 200 {object} controllers.GetDocumentContent.successResponseBody
+// @Failure 400 {object} controllers.GetDocumentContent.invalidResponseBody
+// @Failure 500 {object} controllers.GetDocumentContent.failedResponseBody
+// @Router /document/content [get]
+func GetDocumentContent(c *gin.Context) {
+	type requestBody struct {
+		UserID     uint `json:"user_id" binding:"required" example:"1"`
+		DocumentID uint `json:"document_id" binding:"required" example:"1"`
+	}
+	type invalidResponseBody struct {
+		Error string `json:"error" example:"Invalid request body"`
+	}
+	type failedResponseBody struct {
+		Error string `json:"error" example:"Failed to get document content"`
+	}
+	type successResponseBody struct {
+		Document models.Document `json:"document" example:"{document}"`
+	}
+
+	var body requestBody
+	err := c.BindJSON(&body)
+	if err != nil {
+		log.Println(err)
+		c.JSON(http.StatusBadRequest, invalidResponseBody{
+			Error: "Invalid request body",
+		})
+		return
+	}
+
+	document, err := services.GetDocumentContent(body.UserID, body.DocumentID)
+	if err != nil {
+		log.Println(err)
+		c.JSON(http.StatusInternalServerError, failedResponseBody{
+			Error: "Failed to get document content",
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, successResponseBody{
+		Document: document,
 	})
 }

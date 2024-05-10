@@ -59,6 +59,50 @@ const docTemplate = `{
                         }
                     }
                 }
+            },
+            "delete": {
+                "description": "Delete the document; the user should have authorization to delete.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Document"
+                ],
+                "summary": "Delete document",
+                "parameters": [
+                    {
+                        "description": " ",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controllers.DeleteDocument.requestBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.DeleteDocument.successResponseBody"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.DeleteDocument.invalidResponseBody"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.DeleteDocument.failedResponseBody"
+                        }
+                    }
+                }
             }
         },
         "/document/add/viewer": {
@@ -102,6 +146,52 @@ const docTemplate = `{
                         "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/controllers.AddViewer.failedResponseBody"
+                        }
+                    }
+                }
+            }
+        },
+        "/document/content": {
+            "get": {
+                "description": "Get the document content; the user should have authorization to get the content.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Document"
+                ],
+                "summary": "Get document content",
+                "parameters": [
+                    {
+                        "description": " ",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controllers.GetDocumentContent.requestBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.GetDocumentContent.successResponseBody"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.GetDocumentContent.invalidResponseBody"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.GetDocumentContent.failedResponseBody"
                         }
                     }
                 }
@@ -570,6 +660,44 @@ const docTemplate = `{
                 }
             }
         },
+        "controllers.DeleteDocument.failedResponseBody": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string",
+                    "example": "Failed to delete document"
+                }
+            }
+        },
+        "controllers.DeleteDocument.invalidResponseBody": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string",
+                    "example": "Invalid request body"
+                }
+            }
+        },
+        "controllers.DeleteDocument.requestBody": {
+            "type": "object",
+            "required": [
+                "author_id",
+                "document_id"
+            ],
+            "properties": {
+                "author_id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "document_id": {
+                    "type": "integer",
+                    "example": 1
+                }
+            }
+        },
+        "controllers.DeleteDocument.successResponseBody": {
+            "type": "object"
+        },
         "controllers.GetAuthorDocuments.failedResponseBody": {
             "type": "object",
             "properties": {
@@ -605,6 +733,54 @@ const docTemplate = `{
                     "items": {
                         "$ref": "#/definitions/controllers.docDto"
                     }
+                }
+            }
+        },
+        "controllers.GetDocumentContent.failedResponseBody": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string",
+                    "example": "Failed to get document content"
+                }
+            }
+        },
+        "controllers.GetDocumentContent.invalidResponseBody": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string",
+                    "example": "Invalid request body"
+                }
+            }
+        },
+        "controllers.GetDocumentContent.requestBody": {
+            "type": "object",
+            "required": [
+                "document_id",
+                "user_id"
+            ],
+            "properties": {
+                "document_id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "user_id": {
+                    "type": "integer",
+                    "example": 1
+                }
+            }
+        },
+        "controllers.GetDocumentContent.successResponseBody": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "string",
+                    "example": "Hello, world!"
+                },
+                "title": {
+                    "type": "string",
+                    "example": "My first C program"
                 }
             }
         },
