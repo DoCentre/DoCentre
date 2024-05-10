@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/docentre/docentre/models"
 	"github.com/docentre/docentre/services"
 	"github.com/gin-gonic/gin"
 )
@@ -473,8 +474,7 @@ func GetDocumentContent(c *gin.Context) {
 		Error string `json:"error" example:"Failed to get document content"`
 	}
 	type successResponseBody struct {
-		Title   string `json:"title" example:"My first C program"`
-		Content string `json:"content" example:"Hello, world!"`
+		Document models.Document `json:"document" example:"{document}"`
 	}
 
 	var body requestBody
@@ -487,7 +487,7 @@ func GetDocumentContent(c *gin.Context) {
 		return
 	}
 
-	documentContent, err := services.GetDocumentContent(body.UserID, body.DocumentID)
+	document, err := services.GetDocumentContent(body.UserID, body.DocumentID)
 	if err != nil {
 		log.Println(err)
 		c.JSON(http.StatusInternalServerError, failedResponseBody{
@@ -497,7 +497,6 @@ func GetDocumentContent(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, successResponseBody{
-		Title:   documentContent.Title,
-		Content: documentContent.Content,
+		Document: document,
 	})
 }

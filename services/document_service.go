@@ -157,22 +157,17 @@ func DeleteDocument(authorID, documentID uint) error {
 	return nil
 }
 
-type DocumentContent struct {
-	Title   string
-	Content string
-}
-
-func GetDocumentContent(userID, documentID uint) (DocumentContent, error) {
+func GetDocumentContent(userID, documentID uint) (models.Document, error) {
 	var document models.Document
 	result := repositories.DB.Where("id = ?", documentID).First(&document)
 	if result.Error != nil {
-		return DocumentContent{}, result.Error
+		return document, result.Error
 	}
 
 	// Check if the user has permission to get the document content.
 	if document.AuthorID != userID && document.ApproverID != userID && !isAdmin(userID) {
-		return DocumentContent{}, fmt.Errorf("user %d does not have the permission to view the document %d", userID, documentID)
+		return document, fmt.Errorf("user %d does not have the permission to view the document %d", userID, documentID)
 	}
 
-	return DocumentContent{Title: document.Title, Content: document.Content}, nil
+	return document, nil
 }
