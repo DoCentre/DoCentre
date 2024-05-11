@@ -474,7 +474,7 @@ func GetDocumentContent(c *gin.Context) {
 		Error string `json:"error" example:"Failed to get document content"`
 	}
 	type successResponseBody struct {
-		Document models.Document `json:"document" example:"{document}"`
+		Document models.Document `json:"document"`
 	}
 
 	var body requestBody

@@ -763,13 +763,8 @@
         "controllers.GetDocumentContent.successResponseBody": {
             "type": "object",
             "properties": {
-                "content": {
-                    "type": "string",
-                    "example": "Hello, world!"
-                },
-                "title": {
-                    "type": "string",
-                    "example": "My first C program"
+                "document": {
+                    "$ref": "#/definitions/models.Document"
                 }
             }
         },
@@ -1147,6 +1142,75 @@
                 "msg": {
                     "type": "string",
                     "example": "Invalid request body"
+                }
+            }
+        },
+        "models.Document": {
+            "type": "object",
+            "properties": {
+                "appendix": {
+                    "type": "string"
+                },
+                "approvedDate": {
+                    "type": "string"
+                },
+                "approver": {
+                    "$ref": "#/definitions/models.User"
+                },
+                "approverID": {
+                    "description": "foreign keys to User",
+                    "type": "integer"
+                },
+                "author": {
+                    "$ref": "#/definitions/models.User"
+                },
+                "authorID": {
+                    "type": "integer"
+                },
+                "comment": {
+                    "type": "string"
+                },
+                "content": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "description": "建立時間（由GORM自動管理）",
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "status": {
+                    "description": "EDIT, VERIFY, REJECT, APPROVE",
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "description": "最後一次更新時間（由GORM自動管理）",
+                    "type": "string"
+                }
+            }
+        },
+        "models.User": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "identity": {
+                    "description": "user, admin",
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
                 }
             }
         },
