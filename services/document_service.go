@@ -161,7 +161,7 @@ func GetDocumentContent(userID, documentID uint) (models.Document, error) {
 	var document models.Document
 	result := repositories.DB.Where("id = ?", documentID).First(&document)
 	if result.Error != nil {
-		return document, result.Error
+		return models.Document{}, result.Error
 	}
 
 	// Check if the user has permission to get the document content.
