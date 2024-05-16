@@ -153,7 +153,7 @@ const docTemplate = `{
         },
         "/document/content": {
             "post": {
-                "description": "Get the document content; the user should have authorization to get the content.",
+                "description": "Get the content of the document.",
                 "consumes": [
                     "application/json"
                 ],

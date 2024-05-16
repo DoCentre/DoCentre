@@ -514,7 +514,7 @@ func DeleteDocument(c *gin.Context) {
 }
 
 // @Summary Get document content
-// @Description Get the document content; the user should have authorization to get the content.
+// @Description Get the content of the document.
 // @Tags Document
 // @Accept json
 // @Produce json

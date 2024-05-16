@@ -175,11 +175,5 @@ func GetDocumentContent(userID, documentID uint) (models.Document, error) {
 	if result.Error != nil {
 		return models.Document{}, result.Error
 	}
-
-	// Check if the user has permission to get the document content.
-	if document.AuthorID != userID && document.ApproverID != userID && !isAdmin(userID) {
-		return document, fmt.Errorf("user %d does not have the permission to view the document %d", userID, documentID)
-	}
-
 	return document, nil
 }

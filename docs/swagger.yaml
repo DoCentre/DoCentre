@@ -565,8 +565,7 @@ paths:
     post:
       consumes:
       - application/json
-      description: Get the document content; the user should have authorization to
-        get the content.
+      description: Get the content of the document.
       parameters:
       - description: ' '
         in: body
