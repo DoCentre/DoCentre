@@ -1,11 +1,10 @@
 package main
 
 import (
-	"log"
 	"os"
 
 	"github.com/docentre/docentre/router"
-	"github.com/joho/godotenv"
+	_ "github.com/joho/godotenv/autoload"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 
@@ -13,10 +12,6 @@ import (
 )
 
 func init() {
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
-	}
 	dsn := os.Getenv("DB_URL")
 	// NOTE: Decouple the kind of database from the connection,
 	// so that multiple databases can be supported.
