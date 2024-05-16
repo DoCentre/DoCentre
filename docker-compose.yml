@@ -2,7 +2,7 @@ services:
     server:
         hostname: server
         build:
-            context: .
+            context: Dockerfile.dev
             args:
                 - UID=1000
                 - GID=1000
