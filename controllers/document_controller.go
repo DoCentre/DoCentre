@@ -461,7 +461,7 @@ func DeleteDocument(c *gin.Context) {
 // @Success 200 {object} controllers.GetDocumentContent.successResponseBody
 // @Failure 400 {object} controllers.GetDocumentContent.invalidResponseBody
 // @Failure 500 {object} controllers.GetDocumentContent.failedResponseBody
-// @Router /document/content [get]
+// @Router /document/content [post]
 func GetDocumentContent(c *gin.Context) {
 	type requestBody struct {
 		UserID     uint `json:"user_id" binding:"required" example:"1"`

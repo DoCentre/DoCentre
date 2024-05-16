@@ -52,7 +52,7 @@ func setDocumentController(r *gin.Engine) {
 	r.PUT("/document/update/status", controllers.SetDocumentStatus)
 	r.POST("/document/histories", controllers.GetDocumentHistories)
 	r.DELETE("/document", controllers.DeleteDocument)
-	r.GET("/document/content", controllers.GetDocumentContent)
+	r.POST("/document/content", controllers.GetDocumentContent)
 }
 
 func SetupRouter() *gin.Engine {

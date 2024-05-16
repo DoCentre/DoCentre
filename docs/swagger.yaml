@@ -537,7 +537,7 @@ paths:
       tags:
       - Document
   /document/content:
-    get:
+    post:
       consumes:
       - application/json
       description: Get the document content; the user should have authorization to
