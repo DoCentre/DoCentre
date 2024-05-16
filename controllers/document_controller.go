@@ -189,19 +189,19 @@ func GetAuthorDocuments(c *gin.Context) {
 	})
 }
 
-// @Summary Get viewer documents
-// @Description Get all documents that belong to the viewer; the viewer has to be a existing user.
+// @Summary Get approver documents
+// @Description Get all documents that need to be approved by the approver; the approver has to be a existing user.
 // @Tags Document
 // @Accept json
 // @Produce json
-// @Param body body controllers.GetViewerDocuments.requestBody true " "
-// @Success 200 {object} controllers.GetViewerDocuments.successResponseBody
-// @Failure 400 {object} controllers.GetViewerDocuments.invalidResponseBody
-// @Failure 500 {object} controllers.GetViewerDocuments.failedResponseBody
-// @Router /documents/viewer [post]
-func GetViewerDocuments(c *gin.Context) {
+// @Param body body controllers.GetApproverDocuments.requestBody true " "
+// @Success 200 {object} controllers.GetApproverDocuments.successResponseBody
+// @Failure 400 {object} controllers.GetApproverDocuments.invalidResponseBody
+// @Failure 500 {object} controllers.GetApproverDocuments.failedResponseBody
+// @Router /documents/approver [post]
+func GetApproverDocuments(c *gin.Context) {
 	type requestBody struct {
-		ViewerID uint `json:"viewer_id" example:"1"`
+		ApproverID uint `json:"approver_id" example:"1"`
 	}
 	type invalidResponseBody struct {
 		Error string `json:"error" example:"Invalid request body"`
@@ -223,7 +223,68 @@ func GetViewerDocuments(c *gin.Context) {
 		return
 	}
 
-	docs, err := services.GetViewerDocuments(body.ViewerID)
+	docs, err := services.GetApproverDocuments(body.ApproverID)
+	if err != nil {
+		log.Println(err)
+		c.JSON(http.StatusInternalServerError, failedResponseBody{
+			Error: "Failed to get documents",
+		})
+		return
+	}
+
+	var docsDto []docDto
+
+	for _, doc := range docs {
+		docsDto = append(docsDto, docDto{
+			ID:        doc.ID,
+			AuthorID:  doc.AuthorID,
+			Title:     doc.Title,
+			Status:    doc.Status,
+			CreatedAt: doc.CreatedAt.String(),
+			UpdatedAt: doc.UpdatedAt.String(),
+		})
+	}
+
+	c.JSON(http.StatusOK, successResponseBody{
+		Documents: docsDto,
+	})
+}
+
+// @Summary Get verify documents
+// @Description Get all documents that has been verified, thus can be viewed by any user; if the user is an admin, return all documents instead.
+// @Tags Document
+// @Accept json
+// @Produce json
+// @Param body body controllers.GetVerifyDocuments.requestBody true " "
+// @Success 200 {object} controllers.GetVerifyDocuments.successResponseBody
+// @Failure 400 {object} controllers.GetVerifyDocuments.invalidResponseBody
+// @Failure 500 {object} controllers.GetVerifyDocuments.failedResponseBody
+// @Router /documents/verify [post]
+func GetVerifyDocuments(c *gin.Context) {
+	type requestBody struct {
+		UserID uint `json:"user_id" example:"1"`
+	}
+	type invalidResponseBody struct {
+		Error string `json:"error" example:"Invalid request body"`
+	}
+	type failedResponseBody struct {
+		Error string `json:"error" example:"Failed to get documents"`
+	}
+	type successResponseBody struct {
+		Documents []docDto `json:"documents"`
+	}
+
+	var body requestBody
+	err := c.BindJSON(&body)
+	if err != nil {
+		log.Println(err)
+		c.JSON(http.StatusBadRequest, invalidResponseBody{
+			Error: "Invalid request body",
+		})
+		return
+	}
+
+	docs, err := services.GetVerifyDocuments(body.UserID)
 	if err != nil {
 		log.Println(err)
 		c.JSON(http.StatusInternalServerError, failedResponseBody{

@@ -335,6 +335,52 @@ const docTemplate = `{
                 }
             }
         },
+        "/documents/approver": {
+            "post": {
+                "description": "Get all documents that need to be approved by the approver; the approver has to be a existing user.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Document"
+                ],
+                "summary": "Get approver documents",
+                "parameters": [
+                    {
+                        "description": " ",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controllers.GetApproverDocuments.requestBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.GetApproverDocuments.successResponseBody"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.GetApproverDocuments.invalidResponseBody"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.GetApproverDocuments.failedResponseBody"
+                        }
+                    }
+                }
+            }
+        },
         "/documents/author": {
             "post": {
                 "description": "Get all documents that belong to the author; the author has to be a existing user.",
@@ -381,9 +427,9 @@ const docTemplate = `{
                 }
             }
         },
-        "/documents/viewer": {
+        "/documents/verify": {
             "post": {
-                "description": "Get all documents that belong to the viewer; the viewer has to be a existing user.",
+                "description": "Get all documents that has been verified, thus can be viewed by any user; if the user is an admin, return all documents instead.",
                 "consumes": [
                     "application/json"
                 ],
@@ -393,7 +439,7 @@ const docTemplate = `{
                 "tags": [
                     "Document"
                 ],
-                "summary": "Get viewer documents",
+                "summary": "Get verify documents",
                 "parameters": [
                     {
                         "description": " ",
@@ -401,7 +447,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/controllers.GetViewerDocuments.requestBody"
+                            "$ref": "#/definitions/controllers.GetVerifyDocuments.requestBody"
                         }
                     }
                 ],
@@ -409,19 +455,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/controllers.GetViewerDocuments.successResponseBody"
+                            "$ref": "#/definitions/controllers.GetVerifyDocuments.successResponseBody"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/controllers.GetViewerDocuments.invalidResponseBody"
+                            "$ref": "#/definitions/controllers.GetVerifyDocuments.invalidResponseBody"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/controllers.GetViewerDocuments.failedResponseBody"
+                            "$ref": "#/definitions/controllers.GetVerifyDocuments.failedResponseBody"
                         }
                     }
                 }
@@ -698,6 +744,44 @@ const docTemplate = `{
         "controllers.DeleteDocument.successResponseBody": {
             "type": "object"
         },
+        "controllers.GetApproverDocuments.failedResponseBody": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string",
+                    "example": "Failed to get documents"
+                }
+            }
+        },
+        "controllers.GetApproverDocuments.invalidResponseBody": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string",
+                    "example": "Invalid request body"
+                }
+            }
+        },
+        "controllers.GetApproverDocuments.requestBody": {
+            "type": "object",
+            "properties": {
+                "approver_id": {
+                    "type": "integer",
+                    "example": 1
+                }
+            }
+        },
+        "controllers.GetApproverDocuments.successResponseBody": {
+            "type": "object",
+            "properties": {
+                "documents": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/controllers.docDto"
+                    }
+                }
+            }
+        },
         "controllers.GetAuthorDocuments.failedResponseBody": {
             "type": "object",
             "properties": {
@@ -857,7 +941,7 @@ const docTemplate = `{
                 }
             }
         },
-        "controllers.GetViewerDocuments.failedResponseBody": {
+        "controllers.GetVerifyDocuments.failedResponseBody": {
             "type": "object",
             "properties": {
                 "error": {
@@ -866,7 +950,7 @@ const docTemplate = `{
                 }
             }
         },
-        "controllers.GetViewerDocuments.invalidResponseBody": {
+        "controllers.GetVerifyDocuments.invalidResponseBody": {
             "type": "object",
             "properties": {
                 "error": {
@@ -875,16 +959,16 @@ const docTemplate = `{
                 }
             }
         },
-        "controllers.GetViewerDocuments.requestBody": {
+        "controllers.GetVerifyDocuments.requestBody": {
             "type": "object",
             "properties": {
-                "viewer_id": {
+                "user_id": {
                     "type": "integer",
                     "example": 1
                 }
             }
         },
-        "controllers.GetViewerDocuments.successResponseBody": {
+        "controllers.GetVerifyDocuments.successResponseBody": {
             "type": "object",
             "properties": {
                 "documents": {

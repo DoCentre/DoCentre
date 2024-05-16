@@ -77,6 +77,31 @@ definitions:
     type: object
   controllers.DeleteDocument.successResponseBody:
     type: object
+  controllers.GetApproverDocuments.failedResponseBody:
+    properties:
+      error:
+        example: Failed to get documents
+        type: string
+    type: object
+  controllers.GetApproverDocuments.invalidResponseBody:
+    properties:
+      error:
+        example: Invalid request body
+        type: string
+    type: object
+  controllers.GetApproverDocuments.requestBody:
+    properties:
+      approver_id:
+        example: 1
+        type: integer
+    type: object
+  controllers.GetApproverDocuments.successResponseBody:
+    properties:
+      documents:
+        items:
+          $ref: '#/definitions/controllers.docDto'
+        type: array
+    type: object
   controllers.GetAuthorDocuments.failedResponseBody:
     properties:
       error:
@@ -183,25 +208,25 @@ definitions:
         example: Unexpected error
         type: string
     type: object
-  controllers.GetViewerDocuments.failedResponseBody:
+  controllers.GetVerifyDocuments.failedResponseBody:
     properties:
       error:
         example: Failed to get documents
         type: string
     type: object
-  controllers.GetViewerDocuments.invalidResponseBody:
+  controllers.GetVerifyDocuments.invalidResponseBody:
     properties:
       error:
         example: Invalid request body
         type: string
     type: object
-  controllers.GetViewerDocuments.requestBody:
+  controllers.GetVerifyDocuments.requestBody:
     properties:
-      viewer_id:
+      user_id:
         example: 1
         type: integer
     type: object
-  controllers.GetViewerDocuments.successResponseBody:
+  controllers.GetVerifyDocuments.successResponseBody:
     properties:
       documents:
         items:
@@ -660,6 +685,37 @@ paths:
       summary: Set document status
       tags:
       - Document
+  /documents/approver:
+    post:
+      consumes:
+      - application/json
+      description: Get all documents that need to be approved by the approver; the
+        approver has to be a existing user.
+      parameters:
+      - description: ' '
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.GetApproverDocuments.requestBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.GetApproverDocuments.successResponseBody'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.GetApproverDocuments.invalidResponseBody'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/controllers.GetApproverDocuments.failedResponseBody'
+      summary: Get approver documents
+      tags:
+      - Document
   /documents/author:
     post:
       consumes:
@@ -691,35 +747,35 @@ paths:
       summary: Get author documents
       tags:
       - Document
-  /documents/viewer:
+  /documents/verify:
     post:
       consumes:
       - application/json
-      description: Get all documents that belong to the viewer; the viewer has to
-        be a existing user.
+      description: Get all documents that has been verified, thus can be viewed by
+        any user; if the user is an admin, return all documents instead.
       parameters:
       - description: ' '
         in: body
         name: body
         required: true
         schema:
-          $ref: '#/definitions/controllers.GetViewerDocuments.requestBody'
+          $ref: '#/definitions/controllers.GetVerifyDocuments.requestBody'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/controllers.GetViewerDocuments.successResponseBody'
+            $ref: '#/definitions/controllers.GetVerifyDocuments.successResponseBody'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/controllers.GetViewerDocuments.invalidResponseBody'
+            $ref: '#/definitions/controllers.GetVerifyDocuments.invalidResponseBody'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/controllers.GetViewerDocuments.failedResponseBody'
-      summary: Get viewer documents
+            $ref: '#/definitions/controllers.GetVerifyDocuments.failedResponseBody'
+      summary: Get verify documents
       tags:
       - Document
   /health:

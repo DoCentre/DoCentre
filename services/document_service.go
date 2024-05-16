@@ -5,6 +5,7 @@ import (
 
 	"github.com/docentre/docentre/models"
 	"github.com/docentre/docentre/repositories"
+	"gorm.io/gorm"
 )
 
 func CreateDocument(authorID uint) (models.Document, error) {
@@ -58,15 +59,26 @@ func GetAuthorDocuments(authorID uint) ([]models.Document, error) {
 	return docs, nil
 }
 
-func GetViewerDocuments(viewerID uint) ([]models.Document, error) {
+func GetApproverDocuments(approverID uint) ([]models.Document, error) {
 	var docs []models.Document
-
-	result := repositories.DB.Joins("JOIN document_viewers ON documents.id = document_viewers.document_id").Where("viewer_id = ?", viewerID).Find(&docs)
-
+	result := repositories.DB.Where("approver_id = ?", approverID).Find(&docs)
 	if result.Error != nil {
 		return []models.Document{}, result.Error
 	}
+	return docs, nil
+}
 
+func GetVerifyDocuments(viewerID uint) ([]models.Document, error) {
+	var docs []models.Document
+	var result *gorm.DB
+	if isAdmin(viewerID) {
+		result = repositories.DB.Find(&docs)
+	} else {
+		result = repositories.DB.Where("status = ?", "VERIFY").Find(&docs)
+	}
+	if result.Error != nil {
+		return []models.Document{}, result.Error
+	}
 	return docs, nil
 }
 
