@@ -6,6 +6,7 @@ import (
 	"github.com/docentre/docentre/controllers"
 	"github.com/docentre/docentre/docs"
 	"github.com/gin-gonic/gin"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 
 	swaggerfiles "github.com/swaggo/files"     // swagger embed files
 	ginswagger "github.com/swaggo/gin-swagger" // gin-swagger middleware
@@ -33,6 +34,10 @@ func setSwagger(r *gin.Engine) {
 	r.GET("/swagger/*any", ginswagger.WrapHandler(swaggerfiles.Handler, ginswagger.DefaultModelsExpandDepth(-1)))
 }
 
+func setPrometheus(r *gin.Engine) {
+	r.GET("/metrics", gin.WrapH(promhttp.Handler()))
+}
+
 func setHealthCheckController(r *gin.Engine) {
 	r.GET("/health", CheckHealth)
 }
@@ -58,6 +63,7 @@ func setDocumentController(r *gin.Engine) {
 
 func SetupRouter() *gin.Engine {
 	r := gin.Default()
+	setPrometheus(r)
 	setHealthCheckController(r)
 	setUserController(r)
 	setDocumentController(r)
