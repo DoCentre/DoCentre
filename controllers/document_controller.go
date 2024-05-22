@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"errors"
 	"log"
 	"net/http"
 
@@ -106,7 +107,10 @@ func UpdateDocument(c *gin.Context) {
 		Status:     body.Status,
 		ApproverID: body.ApproverID,
 	})
-	if err != nil {
+	// NOTE: A failed email sending does not affect the status change.
+	if errors.As(err, &services.EmailSendingError{}) {
+		log.Println(err)
+	} else if err != nil {
 		log.Println(err)
 		c.JSON(http.StatusInternalServerError, failedResponseBody{
 			Error: "Failed to update document",
