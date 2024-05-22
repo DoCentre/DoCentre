@@ -49,10 +49,18 @@ func UpdateDocument(doc UpdateDocumentSnapshot) (uint, error) {
 	}
 
 	result := repositories.DB.Model(&models.Document{}).Where("id = ?", doc.DocumentID).Updates(updateString)
-
 	if result.Error != nil {
 		return 0, result.Error
 	}
+
+	result = repositories.DB.Model(&models.DocumentHistory{}).Create(&models.DocumentHistory{
+		DocumentID: doc.DocumentID,
+		Status:     doc.Status,
+	})
+	if result.Error != nil {
+		return 0, result.Error
+	}
+
 	// NOTE: Put at the end so that an email sending failure does not affect the status change.
 	if doc.Status == "APPROVE" {
 		if err := sendEmailToApprover(doc.DocumentID, doc.ApproverID); err != nil {
