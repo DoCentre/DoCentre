@@ -371,7 +371,7 @@ func SetDocumentStatus(c *gin.Context) {
 		DocumentID uint   `json:"document_id" binding:"required" example:"1"`
 		AppoverID  uint   `json:"approver_id" example:"1"`
 		Status     string `json:"status" binding:"required" example:"REJECT"`
-		Commnet    string `json:"comment" binding:"required" example:"It looks bad :("`
+		Comment    string `json:"comment" binding:"required" example:"It looks bad :("`
 	}
 	type invalidResponseBody struct {
 		Error string `json:"error" example:"Invalid request body"`
@@ -391,7 +391,7 @@ func SetDocumentStatus(c *gin.Context) {
 		return
 	}
 
-	err = services.SetDocumentStatus(body.DocumentID, body.Status, body.AppoverID, body.Commnet)
+	err = services.SetDocumentStatus(body.DocumentID, body.Status, body.AppoverID, body.Comment)
 	if err != nil {
 		log.Println(err)
 		c.JSON(http.StatusInternalServerError, failedResponseBody{
