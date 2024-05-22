@@ -29,3 +29,5 @@ docentre
 
 .idea/
 .vscode/
+
+.env
