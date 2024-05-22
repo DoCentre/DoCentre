@@ -36,8 +36,6 @@ func setSwagger(r *gin.Engine) {
 
 func setPrometheus(r *gin.Engine) {
 	r.GET("/metrics", gin.WrapH(promhttp.Handler()))
-	// http.Handle("/metrics", promhttp.Handler())
-	// http.ListenAndServe(":8080", nil)
 }
 
 func setHealthCheckController(r *gin.Engine) {

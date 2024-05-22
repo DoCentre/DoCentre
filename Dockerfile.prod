@@ -1,14 +1,3 @@
-# FROM golang:alpine
-# WORKDIR /app
-
-# COPY . .
-# RUN go mod download
-# # RUN CGO_ENABLED=0 GOOS=linux go build -o /doentre
-
-# EXPOSE 8080
-# CMD ["/doentre"]
-
-
 FROM golang:alpine AS build-env
 ADD . /src
 RUN cd /src && CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o app
