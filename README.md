@@ -57,7 +57,15 @@ $ cd DoCentre
 $ cd DoCentre-main
 ```
 
-3. Run the containers:
+3. Copy the `.env.sample` file to `.env`:
+
+```console
+$ cp .env.sample .env
+```
+
+4. Fill in the environment variables in the `.env` file.
+
+5. Run the containers:
 
 ```console
 $ docker compose up

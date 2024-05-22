@@ -18,6 +18,14 @@ func CreateDocument(authorID uint) (models.Document, error) {
 	return doc, nil
 }
 
+type EmailSendingError struct {
+	Err error
+}
+
+func (e EmailSendingError) Error() string {
+	return e.Err.Error()
+}
+
 type UpdateDocumentSnapshot struct {
 	DocumentID uint
 	AuthorID   uint
@@ -28,6 +36,7 @@ type UpdateDocumentSnapshot struct {
 	ApproverID uint
 }
 
+// UpdateDocument an email is sent to the approver if the status is "APPROVE" and returns an `EmailSendingError` if the email sending fails.
 func UpdateDocument(doc UpdateDocumentSnapshot) (uint, error) {
 	// documentID uint, authorID uint, title string, content string, appendix string, status string, approverID uint
 	var noApproverYet uint = 0
@@ -43,6 +52,12 @@ func UpdateDocument(doc UpdateDocumentSnapshot) (uint, error) {
 
 	if result.Error != nil {
 		return 0, result.Error
+	}
+	// NOTE: Put at the end so that an email sending failure does not affect the status change.
+	if doc.Status == "APPROVE" {
+		if err := sendEmailToApprover(doc.DocumentID, doc.ApproverID); err != nil {
+			return 0, EmailSendingError{err}
+		}
 	}
 	return doc.DocumentID, nil
 }
