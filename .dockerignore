@@ -1,0 +1,27 @@
+# Configuration
+.editorconfig
+*.env.sample
+.pre-commit-config.yaml
+
+# Git
+.git
+.github
+
+# Documentation
+LICENSE
+Makefile
+NOTICE
+*.md
+
+# Build
+.cache
+*.out
+docentre
+
+# Database
+.db
+
+# Docker
+Dockerfile*
+.dockerignore
+docker-compose*
