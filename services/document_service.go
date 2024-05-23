@@ -36,23 +36,41 @@ type UpdateDocumentSnapshot struct {
 	ApproverID uint
 }
 
-// UpdateDocument an email is sent to the approver if the status is "APPROVE" and returns an `EmailSendingError` if the email sending fails.
+// UpdateDocument updates the document with the given document snapshot. If the status of the document is changed, such change is recorded in the DocumentHistory table.
+// An email is sent to the approver if the status is "APPROVE" and returns an `EmailSendingError` if the email sending fails.
 func UpdateDocument(doc UpdateDocumentSnapshot) (uint, error) {
-	// documentID uint, authorID uint, title string, content string, appendix string, status string, approverID uint
+	// Get the original status of the document.
+	var originalStatus string
+	result := repositories.DB.Model(&models.Document{}).Select("status").Where("id = ?", doc.DocumentID).First(&originalStatus)
+	if result.Error != nil {
+		return 0, result.Error
+	}
+
+	// Update the document.
 	var noApproverYet uint = 0
 	var updateString map[string]interface{}
-
 	if doc.ApproverID == noApproverYet {
 		updateString = map[string]interface{}{"author_id": doc.AuthorID, "title": doc.Title, "content": doc.Content, "appendix": doc.Appendix, "status": doc.Status}
 	} else {
 		updateString = map[string]interface{}{"author_id": doc.AuthorID, "title": doc.Title, "content": doc.Content, "appendix": doc.Appendix, "status": doc.Status, "approver_id": doc.ApproverID}
 	}
 
-	result := repositories.DB.Model(&models.Document{}).Where("id = ?", doc.DocumentID).Updates(updateString)
-
+	result = repositories.DB.Model(&models.Document{}).Where("id = ?", doc.DocumentID).Updates(updateString)
 	if result.Error != nil {
 		return 0, result.Error
 	}
+
+	// Record the status change in the DocumentHistory table.
+	if doc.Status != originalStatus {
+		result = repositories.DB.Model(&models.DocumentHistory{}).Create(&models.DocumentHistory{
+			DocumentID: doc.DocumentID,
+			Status:     doc.Status,
+		})
+		if result.Error != nil {
+			return 0, result.Error
+		}
+	}
+
 	// NOTE: Put at the end so that an email sending failure does not affect the status change.
 	if doc.Status == "APPROVE" {
 		if err := sendEmailToApprover(doc.DocumentID, doc.ApproverID); err != nil {
