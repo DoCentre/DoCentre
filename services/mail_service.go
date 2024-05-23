@@ -12,17 +12,18 @@ import (
 )
 
 type Config struct {
-	Host       string
-	Port       string
-	Sender     string
-	Password   string
-	DocUrlTmpl string
+	Host         string
+	Port         string
+	AuthEmail    string
+	AuthPassword string
+	SenderEmail  string
+	DocUrlTmpl   string
 }
 
 func loadConfig() (Config, error) {
 	var config Config
-	fields := []*string{&config.Host, &config.Port, &config.Sender, &config.Password, &config.DocUrlTmpl}
-	fieldNames := []string{"SMTP_HOST", "SMTP_PORT", "EMAIL_SENDER", "EMAIL_PASSWORD", "DOC_URL_TMPL"}
+	fields := []*string{&config.Host, &config.Port, &config.AuthEmail, &config.AuthPassword, &config.SenderEmail, &config.DocUrlTmpl}
+	fieldNames := []string{"SMTP_HOST", "SMTP_PORT", "AUTH_EMAIL", "AUTH_PASSWORD", "SENDER_EMAIL", "DOC_URL_TMPL"}
 	for i, field := range fields {
 		var ext bool
 		*field, ext = os.LookupEnv(fieldNames[i])
@@ -62,13 +63,13 @@ func sendEmailToApprover(documentID uint, approverID uint) error {
 	if err := client.StartTLS(&tlsConfig); err != nil {
 		return err
 	}
-	auth := smtp.PlainAuth("", config.Sender, config.Password, config.Host)
+	auth := smtp.PlainAuth("", config.AuthEmail, config.AuthPassword, config.Host)
 	if err := client.Auth(auth); err != nil {
 		return err
 	}
 
 	log.Println("Setting the sender and recipient...")
-	if err := client.Mail(config.Sender); err != nil {
+	if err := client.Mail(config.SenderEmail); err != nil {
 		return err
 	}
 	rcpt, err := getEmailOf(approverID)
@@ -87,7 +88,7 @@ func sendEmailToApprover(documentID uint, approverID uint) error {
 	subject := "[DoCentre] Document Approval Request"
 	header := fmt.Sprintf(
 		"To: %s\r\nFrom: %s\r\nSubject: %s\r\n\r\n",
-		rcpt, config.Sender, subject)
+		rcpt, config.SenderEmail, subject)
 	contentTmpl := "You're assigned as an approver of the document %s, please review it."
 	url := fmt.Sprintf(config.DocUrlTmpl, documentID)
 	content := fmt.Sprintf(contentTmpl, url)
