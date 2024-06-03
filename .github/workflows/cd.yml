@@ -17,3 +17,24 @@ jobs:
         run: |
           docker build -f Dockerfile.prod -t ghcr.io/docentre/docentre-backend .
           docker push ghcr.io/docentre/docentre-backend
+
+      - name: Load kubeconfig
+        run: |-
+          mkdir ~/.kube
+          echo "${{ secrets.KUBE_CONFIG }}" | base64 --decode >> ~/.kube/config
+
+      - name: Load k8s files
+        run: |-
+          mkdir k8s
+          echo "${{ secrets.KUBE_BACKEND_FILE }}" | base64 --decode >> k8s/deploy-backend.yaml
+
+      - name: Stop old k8s
+        working-directory: ./k8s
+        run: |-
+          kubectl delete -f deploy-backend.yaml
+
+      - name: Start k8s
+        if: always()
+        working-directory: ./k8s
+        run: |-
+          kubectl apply -f deploy-backend.yaml
