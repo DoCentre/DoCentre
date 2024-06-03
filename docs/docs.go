@@ -582,6 +582,33 @@ const docTemplate = `{
             }
         },
         "/users": {
+            "get": {
+                "description": "Get all users.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Get all users",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.GetUsers.successResponseBody"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.GetUsers.unexpectedErrorResponseBody"
+                        }
+                    }
+                }
+            },
             "post": {
                 "description": "Get users with the same given username.",
                 "consumes": [
@@ -906,6 +933,26 @@ const docTemplate = `{
                     "items": {
                         "$ref": "#/definitions/controllers.historyDto"
                     }
+                }
+            }
+        },
+        "controllers.GetUsers.successResponseBody": {
+            "type": "object",
+            "properties": {
+                "users": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/controllers.UserDto"
+                    }
+                }
+            }
+        },
+        "controllers.GetUsers.unexpectedErrorResponseBody": {
+            "type": "object",
+            "properties": {
+                "msg": {
+                    "type": "string",
+                    "example": "Unexpected error"
                 }
             }
         },

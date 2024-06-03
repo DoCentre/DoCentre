@@ -181,3 +181,44 @@ func GetUsersByUsername(c *gin.Context) {
 		Users: usersDto,
 	})
 }
+
+// @Summary Get all users
+// @Description Get all users.
+// @Tags User
+// @Accept json
+// @Produce json
+// @Success 200 {object} controllers.GetUsers.successResponseBody
+// @Failure 500 {object} controllers.GetUsers.unexpectedErrorResponseBody
+// @Router /users [get]
+func GetUsers(c *gin.Context) {
+	// errorResponseBody the request failed due to unexpected error.
+	type unexpectedErrorResponseBody struct {
+		Msg string `json:"msg" example:"Unexpected error"`
+	}
+	type successResponseBody struct {
+		Users []UserDto `json:"users"`
+	}
+
+	users, err := services.GetUsers()
+	if err != nil {
+		log.Println(err)
+		c.JSON(http.StatusInternalServerError, unexpectedErrorResponseBody{
+			Msg: "Unexpected error",
+		})
+		return
+	}
+
+	var usersDto []UserDto
+	for _, user := range users {
+		userDto := UserDto{
+			ID:       user.ID,
+			Username: user.Username,
+			Email:    user.Email,
+			Identity: user.Identity,
+		}
+		usersDto = append(usersDto, userDto)
+	}
+	c.JSON(http.StatusOK, successResponseBody{
+		Users: usersDto,
+	})
+}

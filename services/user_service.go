@@ -41,3 +41,14 @@ func GetUsersByUsername(name string) ([]models.User, error) {
 	}
 	return users, nil
 }
+
+// GetUsers get all users.
+func GetUsers() ([]models.User, error) {
+	var users []models.User
+	result := repositories.DB.Find(&users)
+
+	if result.Error != nil {
+		return []models.User{}, result.Error
+	}
+	return users, nil
+}

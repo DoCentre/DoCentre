@@ -46,6 +46,7 @@ func setUserController(r *gin.Engine) {
 	r.POST("/user", controllers.UserCreate)
 	r.POST("/login", controllers.UserLogin)
 	r.POST("/users", controllers.GetUsersByUsername)
+	r.GET("/users", controllers.GetUsers)
 }
 
 func setDocumentController(r *gin.Engine) {
