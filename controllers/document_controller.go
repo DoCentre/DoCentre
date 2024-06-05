@@ -76,7 +76,7 @@ func UpdateDocument(c *gin.Context) {
 		Content    string `json:"content" binding:"required" example:"Hello, world!"`
 		Appendix   string `json:"appendix" example:""`
 		Status     string `json:"status" example:"EDIT"`
-		ApproverID uint   `json:"approver_id" example:"0"`
+		ApproverID int    `json:"approver_id" example:"0"`
 	}
 	type invalidResponseBody struct {
 		Error string `json:"error" example:"Invalid request body"`
@@ -98,6 +98,12 @@ func UpdateDocument(c *gin.Context) {
 		return
 	}
 
+	var app_id uint
+	if body.ApproverID < 0 {
+		app_id = 0
+	} else {
+		app_id = uint(body.ApproverID)
+	}
 	documentID, err := services.UpdateDocument(services.UpdateDocumentSnapshot{
 		DocumentID: body.DocumentID,
 		AuthorID:   body.AuthorID,
@@ -105,7 +111,7 @@ func UpdateDocument(c *gin.Context) {
 		Content:    body.Content,
 		Appendix:   body.Appendix,
 		Status:     body.Status,
-		ApproverID: body.ApproverID,
+		ApproverID: app_id,
 	})
 	// NOTE: A failed email sending does not affect the status change.
 	if errors.As(err, &services.EmailSendingError{}) {
